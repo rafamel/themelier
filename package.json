@@ -11,7 +11,8 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:extension.reload"
+    "onCommand:extension.reload",
+    "onCommand:extension.choose"
   ],
   "main": "./out/src/extension",
   "contributes": {
@@ -19,6 +20,10 @@
       {
         "command": "extension.reload",
         "title": "Reload Themelier"
+      },
+      {
+        "command": "extension.choose",
+        "title": "Choose Themelier Theme"
       }
     ]
   },

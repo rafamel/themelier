@@ -1,1 +1,10 @@
-{}
+{
+    "One Dark": "one-dark.json",
+    "One Dark Soft": "one-dark-soft.json",
+    "One Dark Vivid": "one-dark-vivid.json",
+    "One Monokai": "one-monokai.json",
+    "One Monokai Soft": "one-monokai-soft.json",
+    "Plastic": "plastic.json",
+    "Plastic Soft": "plastic-soft.json",
+    "CodeWars": "codewars.json"
+}

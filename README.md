@@ -1,4 +1,12 @@
-# themelier README
+# Themelier
+
+- `.support`: Built-in functions, modules, types, and classes and reserved variables such as `this`, `self`, and `super`.
+- `.constant`: Constants.
+- `.variable`
+    - `definition`: Variables when they are defined (when possible) or specified as a parameter.
+    - `propierty`
+- `.keyword`:
+    - `.operator`: == - 
 
 This is the README for your extension "themelier". After writing up a brief description, we recommend including the following sections.
 
