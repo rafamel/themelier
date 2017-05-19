@@ -1,45 +1,38 @@
 'use strict';
 import * as vscode from 'vscode'; // VS Code extensibility API
+import { Data } from './data';
+import { Controller } from './controller';
+import { Builder } from './builder';
 
 // This method is called when the extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-    // Use the console to output diagnostic information (console.log) and errors (console.error)
+    // Use the console to output diagnostic information (console.log) and errors (console.error).
+    // This line of code will only be executed once when your extension is activated.
 
-    console.log('Themelier is now active!');
+    let data = new Data(context),
+        builder = new Builder(data),
+        controller = new Controller(data, builder);
 
-    const readJson = (file) => JSON.parse(fs.readFileSync(path.join(themingDir, file), 'utf8'));
-    let fs = require('fs'),
-        path = require('path'),
-        themingDir = path.join(__dirname, '../../theming'),
-        rules = readJson('rules.json'),
-        syntax = readJson('syntax.json'),
-        ui = readJson('ui.json');
+    // Do first Build if Needed
+    if (!context.globalState.get('lastPick')) {
+        // builder.firstBuild();
+    }
 
-    // Commands have been defined in package.json (names must match)
-    // They'll be executed every time the command is executed
-    vscode.commands.registerCommand('extension.reload', () => {
-        vscode.window.showInformationMessage('Themelier has been reloaded.');
+    // Register Commands
+    let rebuildCommand = vscode.commands.registerCommand('themelier.rebuild', () => {
+        controller.build();
     });
 
-    vscode.commands.registerCommand('extension.choose', () => {
-
-        function showPick(syntaxSel, uiSel) {
-            console.log(syntaxSel, uiSel);
-        }
-
-        let syntaxItems = Object.keys(syntax),
-            uiItems = Object.keys(ui);
-        vscode.window.showQuickPick(syntaxItems).then(syntaxSel => {
-            if (!syntaxSel) return;
-            vscode.window.showQuickPick(uiItems).then(uiSel => {
-                if (!uiSel) return;
-                showPick(syntaxSel, uiSel)
-            });
-        });
+    let chooseCommand = vscode.commands.registerCommand('themelier.choose', () => {
+        controller.choose();
     });
+    
+    // Add to a list of disposables which are disposed when this extension is deactivated.
+    context.subscriptions.push(data, builder, controller, rebuildCommand, chooseCommand);
 
 }
 
 // Method called when the extension is deactivated
 export function deactivate() {
+
 }

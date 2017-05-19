@@ -1,0 +1,69 @@
+{
+    "variable": [
+        "support.variable",
+        "variable",
+        "punctuation.definition.variable"
+    ],
+    "definition": [
+        "meta.definition.variable variable",
+        "variable.parameter"
+    ],
+    "property": [
+        "support.type.property-name",
+        "support.variable.property",
+        "variable.other.object.property"
+    ],
+    "punctuation": [
+        "meta.brace",
+        "punctuation.definition.array",
+        "punctuation.definition.binding-pattern",
+        "punctuation.definition.block",
+        "punctuation.definition.dictionary",
+        "punctuation.definition.string",
+        "punctuation.definition.tag",
+        "punctuation.section",
+        "punctuation.separator",
+        "punctuation.support",
+        "punctuation.terminator"
+    ],
+    "function": [
+        "entity.name.class",
+        "entity.name.function",
+        "entity.name.type",
+        "entity.other.attribute-name",
+        "entity.other.inherited-class",
+        "markup.heading.setext",
+        "support.function"
+    ],
+    "keyword": [
+        "keyword",
+        "punctuation.definition.keyword"
+    ],
+    "storage": [
+        "markup.inline.raw",
+        "storage",
+        "storage.type"
+    ],
+    "operator": [
+        "keyword.operator"
+    ],
+    "support": [ "support" ],
+    "reserved": [ "variable.language" ],
+    "constant": [
+        "constant",
+        "keyword.other.unit",
+        "support.constant"
+    ],
+    "comment": [
+        "comment"
+    ],
+    "string": [
+        "string",
+        "markup.quote",
+        "markup.bold",
+        "markup.italic"
+    ],
+    "htmlTag": [
+        "entity.name.tag"
+    ]
+}

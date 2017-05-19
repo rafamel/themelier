@@ -1,0 +1,9 @@
+{
+    "editor.background": "#1E1E1E",
+    "sideBar.background": "#1E1E1E",
+    "titleBar.activeBackground": "#1E1E1E",
+    "statusBar.background": "#222222",
+    "peekViewEditor.background": "#222222",
+    "activityBar.background": "#222222",
+    "tab.inactiveBackground": "#282828"
+}

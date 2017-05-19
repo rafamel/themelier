@@ -1,0 +1,8 @@
+{
+    "definition": "variable",
+    "property": "variable",
+    "punctuation": "variable",
+    "storage": "keyword",
+    "constant": "support",
+    "reserved": "support"
+}

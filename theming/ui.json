@@ -1,4 +1,6 @@
 {
-    "Lier Dark": "lier-dark.json",
-    "Atomic": "atomic.json"
+    "dark": {
+        "Lier Dark": "lier-dark.json",
+        "Atomic": "atomic.json"
+    }
 }

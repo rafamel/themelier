@@ -1,12 +1,49 @@
 # Themelier
 
-- `.support`: Built-in functions, modules, types, and classes and reserved variables such as `this`, `self`, and `super`.
-- `.constant`: Constants.
-- `.variable`
-    - `definition`: Variables when they are defined (when possible) or specified as a parameter.
-    - `propierty`
-- `.keyword`:
-    - `.operator`: == - 
+## This extension is under active development and NOT READY FOR USE
+
+## Basic
+
+- `global`
+- `variable`
+- `function`
+- `keyword`: Such as `for`, `while`, and so on.
+- `operator`: Such as `+`, `-`, or `=`.
+- `support`: Built-in functions, modules, types, and classes.
+- `comment`
+- `string`
+- `htmlTag`
+
+## Extended
+
+- Inherit from **variable**:
+    - `definition`: Variables at definition time (when possible) or when placed as a receiving a parameter of a function.
+    - `property`: Variable properties (excluding functions).
+    - `punctuation`: Brackets, colons, dots and other punctuation.
+
+- Inherit from **keyword**:
+    - `storage`: Such as `public`, `private`, `var` or `function`.
+
+- Inherit from **support**:
+    - `constant`: Constants.
+    - `reserved`: Reserved variables such as `this`, `self`, and `super`.
+
+## Settings
+
+...
+
+
+## To Do
+
+- Add Light themes.
+
+## Contribute
+
+Discussions regarding a different inheritance structure for styles are welcomed. The goal is to have a set of unique scoping rules that make the most logical sense, while being consistent and complete across as many languages as possible, so the same applies to the specificities of scoping rules.
+
+Pull requests for new base themes for syntax and UI are also encouraged, particularly for a white UI, since there's none at the moment.
+
+----
 
 This is the README for your extension "themelier". After writing up a brief description, we recommend including the following sections.
 
