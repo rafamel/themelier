@@ -17,26 +17,27 @@ export class Controller {
         });
     }
 
-    private waitToFn = (i: number, fn: Function) => {
-        if (i >= 10) { // ~10 seconds are up!
+    private waitToFn = (fn: Function, i: number = 0) => {
+        if (i >= 20) { // ~10 seconds are up!
             this.actionMsg('Themelier failed to detect your choice.', 'Retry', fn);
         } else { // Continue to wait
             let _this = this;
             setTimeout(function(){
                 if (_this.data.isCurrent()) fn();
-                else _this.waitToFn(i+1, fn);
-            }, 1000);
+                else _this.waitToFn(fn, i+1);
+            }, 500);
         }
     }
 
     private reloadWindow() { vscode.commands.executeCommand('workbench.action.reloadWindow'); }
     private selectAndWaitToChoose = () =>  { 
-        vscode.commands.executeCommand('workbench.action.selectTheme'); this.waitToFn(0, this.choose); 
+        vscode.commands.executeCommand('workbench.action.selectTheme'); this.waitToFn(this.choose);
     }
     private selectAndWaitToBuild = () => {
-        vscode.commands.executeCommand('workbench.action.selectTheme'); this.waitToFn(0, this.build); 
+        vscode.commands.executeCommand('workbench.action.selectTheme'); this.waitToFn(this.build);
     }
 
+    // Choosing
     public choose = () => {
         if (!this.data.isCurrent()) {
             // Current theme is not Themelier
@@ -89,7 +90,7 @@ export class Controller {
         }
         
         this.builder.build();
-        this.actionMsg('Themelier has built the theme based on your settings.', 'Restart', this.reloadWindow);
+        this.actionMsg('Themelier has built the theme based on your settings.', 'Reload', this.reloadWindow);
     }
 
     dispose() {

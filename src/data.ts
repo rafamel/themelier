@@ -10,8 +10,8 @@ export class Data {
     private themingDir: string;
     private _scopes: {};
     private _inheritance: {};
-    public _syntax: {};
-    public _ui: {};
+    private _syntax: {};
+    private _ui: {};
 
     constructor(private context: vscode.ExtensionContext) {
         this.baseDir = path.join(__dirname, '../../');
@@ -19,7 +19,7 @@ export class Data {
     }
 
     // General
-    private readJson(file) { 
+    private readJson(file): {} { 
         return JSON.parse(fs.readFileSync(path.join(this.themingDir, file), 'utf8'));
     }
     
@@ -100,22 +100,23 @@ export class Data {
         return this._scopes;
     }
 
-    public get scopesKeys(): string[] {
-        return Object.keys(this.scopes);
-    }
-
     // Inheritance
     public get inheritance(): Object {
-        if (!this._inheritance) this._inheritance = this.readJson('inheritance.json');
+        if (!this._inheritance) {
+            let readInheritance = this.readJson('inheritance.json'),
+                inheritance = {};
+            for (let item in readInheritance) {
+                readInheritance[item].forEach(x => { inheritance[x] = item; });
+            }
+            this._inheritance = inheritance;
+        }
         return this._inheritance;
     }
 
-    public get inheritanceKeys(): string[] {
-        return Object.keys(this.inheritance);
-    }
-
     // Writing theme files
-    // TO-DO
+    public writeTheme(name: string, theme: {}) {
+        fs.writeFileSync(path.join(this.baseDir, 'dest', name + '.json'), JSON.stringify(theme, null, 2), 'utf8');
+    }
 
     dispose() {
     }
