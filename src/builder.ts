@@ -11,19 +11,21 @@ export class Builder {
     // General
     public build(themeSyntaxUi: {'syntax': {}, 'ui': {}} = this.data.themeSyntaxUi(), mode: string = this.data.savedMode) {
 
-        console.log('Building Themelier Theme');
-        let syntaxFile = themeSyntaxUi.syntax,
+        let name =  'Themelier ' + mode.charAt(0).toUpperCase() + mode.slice(1), // this.data.currentTheme;
+            syntaxFile = themeSyntaxUi.syntax,
             uiFile = themeSyntaxUi.ui,
             scopes = this.data.scopes,
             inheritance = this.data.inheritance,
             theme = {};
 
+        console.log('Building ' + name);
+
         // Check the theme has `global` key
         if (!syntaxFile.hasOwnProperty('global')) {
-            vscode.window.showInformationMessage('There is no "global" color on the chosen theme.');
+            vscode.window.showInformationMessage('There is no "global" color on the chosen Themelier theme');
             return;
         }
-
+        
         let syntaxColors = {'global': {'name': '', 'scope': []}};
         for (let theScopeKey in scopes) {
             let key = 'global';
@@ -56,7 +58,7 @@ export class Builder {
             });
         }
 
-        theme['name'] = 'Themelier ' + mode.charAt(0).toUpperCase() + mode.slice(1); //this.data.currentTheme;
+        theme['name'] = name;
         theme['colors'] = uiFile;
         theme['tokenColors'] = tokenColors;
 
@@ -65,7 +67,7 @@ export class Builder {
     }
 
 
-    public firstBuild() {
+    public fullBuild() {
 
         ['dark', 'light'].forEach(mode => {
 
@@ -78,23 +80,19 @@ export class Builder {
                     uiPick = uiKeys[0],
                     applyUserSettings = false;
 
+                // ...unless this mode is the same one as the saved mode
                 if (mode === this.data.savedMode) {
                     applyUserSettings = true;
                     let savedPick = this.data.savedPick;
-                    if (syntaxKeys.indexOf(savedPick[0]) === -1) {
-                        this.data.setCurrent(mode, []);
-                        syntaxPick = savedPick[0];
-                    }
-                    if (uiKeys.indexOf(savedPick[1]) === -1) {
-                        this.data.setCurrent(mode, []);
-                        uiPick = savedPick[1];
-                    }
+                    if (syntaxKeys.indexOf(savedPick[0]) !== -1) syntaxPick = savedPick[0];
+                    if (uiKeys.indexOf(savedPick[1]) !== -1) uiPick = savedPick[1];
                 }
                 
-                let themeSyntaxUi = this.data.themeSyntaxUi([syntaxPick, uiPick], applyUserSettings);
+                let themeSyntaxUi = this.data.themeSyntaxUi([syntaxPick, uiPick], mode, applyUserSettings);
                 this.build(themeSyntaxUi, mode);
             }
         });
+
     }
 
     dispose() {

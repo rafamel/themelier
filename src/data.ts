@@ -18,19 +18,9 @@ export class Data {
         this.themingDir = path.join(this.baseDir, 'theming');
     }
 
-    // General
+    // Read and Parse JSON
     private readJson(file: string, base: string = this.themingDir): {} { 
         return JSON.parse(fs.readFileSync(path.join(base, file), 'utf8'));
-    }
-    
-    private flatten(obj): Object {
-        let newObj = {}
-         Object.keys(obj).forEach(x => {
-            Object.keys(obj[x]).forEach(y => {
-                newObj[y] = obj[x][y];
-            })
-        });
-        return newObj;
     }
 
     // Syntax and UI Main files
@@ -76,7 +66,7 @@ export class Data {
 
     public get savedPick(): string[] {
         let pick = this.context.globalState.get('thlPick');
-        return (pick) ? [pick[0], pick[1]] : [];
+        return (pick && pick[0] && pick[1]) ? [pick[0], pick[1]] : [];
     }
 
     public setCurrent(mode: string, syntaxUi: string[]) {
@@ -106,8 +96,8 @@ export class Data {
         this.context.globalState.update('thlFirst', (!val));
     }
 
-    // Reading specific theme files
-
+    // Reading user settings w/ specific theme files
+    
     private userSettings(): {'syntax': {}, 'ui': {}} {
         let worspaceConfig = vscode.workspace.getConfiguration('themelier'),
             config = {'syntax': {}, 'ui': {}},
@@ -121,9 +111,9 @@ export class Data {
         return config;
     }
 
-    public themeSyntaxUi(syntaxUiPick: string[] = this.savedPick, applyUserSettings: boolean = true): {'syntax': {}, 'ui': {}} {
-        let syntaxPath = path.join('syntax', this.flatten(this.syntax)[syntaxUiPick[0]]),
-            uiPath = path.join('ui', this.flatten(this.ui)[syntaxUiPick[1]]),
+    public themeSyntaxUi(syntaxUiPick: string[] = this.savedPick, mode: string = this.savedMode, applyUserSettings: boolean = true): {'syntax': {}, 'ui': {}} {
+        let syntaxPath = path.join('syntax', this.syntax[mode][syntaxUiPick[0]]),
+            uiPath = path.join('ui', this.ui[mode][syntaxUiPick[1]]),
             userSettings = this.userSettings(),
             theming = {
                 'syntax': this.readJson(syntaxPath),

@@ -13,19 +13,20 @@ export function activate(context: vscode.ExtensionContext) {
         builder = new Builder(data),
         controller = new Controller(data, builder);
 
-    // Do full build on new install and updates
-    if (data.isFirst || data.currentVer !== data.savedVer) {
-        data.setVer();
-        builder.firstBuild();
-        // if (data.isCurrent()) vscode.commands.executeCommand('workbench.action.reloadWindow');
-    }
-    // Offer theme choice at first install
-    if (data.isFirst) {
+    if (data.isFirst) { // Do first build and offer theme choice at first install
         data.setFirst(false);
+        data.setVer();
+        builder.fullBuild();
         vscode.window.showInformationMessage('Themelier is active', { title: 'Choose a theme' }).then(function (item) {
             if (!item) return;
             controller.choose();
         });
+    } else if (data.currentVer !== data.savedVer) { // Do full build and reload on updates
+        data.setVer();
+        // Silent full build
+        builder.fullBuild();
+        // If it's the current theme, rebuild the chosen theme with the controller assurances, and automatic reload
+        if (data.isCurrent()) controller.build(true);
     }
 
     // Register Commands
@@ -47,4 +48,5 @@ export function deactivate(context: vscode.ExtensionContext) {
     let data = new Data(context);
     data.setFirst(true);
     data.setVer('');
+    data.setCurrent('', []);
 }

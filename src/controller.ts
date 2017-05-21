@@ -68,11 +68,12 @@ export class Controller {
     }
 
     // Building
-    public build = () => {
+    public build = (reload: boolean = false) => {
 
         // Ensure there is some pick of Syntax and UI themes
-        if (!this.data.savedPick.length) {
-            this.actionMsg('You haven\'t chosen your Themelier syntax and UI themes.', 'Choose', this.choose);
+        let savedPick = this.data.savedPick;
+        if (!savedPick.length) {
+            this.actionMsg('You haven\'t chosen your Themelier syntax and UI themes', 'Choose', this.choose);
             return;
         }
 
@@ -83,9 +84,17 @@ export class Controller {
             this.actionMsg('Your current theme is ' + this.data.currentTheme + ' while your last chosen Themelier UI was for ' + savedMode.charAt(0).toUpperCase() + savedMode.slice(1), 'Change', this.choose);
             return;
         }
+
+        let syntaxKeys = this.data.syntaxKeys(savedMode),
+            uiKeys = this.data.uiKeys(savedMode);
+        if (syntaxKeys.indexOf(savedPick[0]) === -1 || uiKeys.indexOf(savedPick[1]) === -1) {
+            this.actionMsg('Your chosen Themelier theme for syntax or UI is not available', 'Change', this.choose);
+        }
         
         this.builder.build();
-        this.actionMsg('Themelier has built the theme based on your settings.', 'Reload', this.reloadWindow);
+
+        if (reload) vscode.commands.executeCommand('workbench.action.reloadWindow');
+        else this.actionMsg('Themelier has built the theme based on your settings', 'Reload', this.reloadWindow);
     }
 
     dispose() {
