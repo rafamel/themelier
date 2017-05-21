@@ -19,8 +19,8 @@ export class Data {
     }
 
     // General
-    private readJson(file): {} { 
-        return JSON.parse(fs.readFileSync(path.join(this.themingDir, file), 'utf8'));
+    private readJson(file: string, base: string = this.themingDir): {} { 
+        return JSON.parse(fs.readFileSync(path.join(base, file), 'utf8'));
     }
     
     private flatten(obj): Object {
@@ -63,8 +63,9 @@ export class Data {
     }
 
     public currentMode(): string {
-        let mode = 'dark';
-        if (this.currentTheme === 'Themelier Light') mode = 'light';
+        let mode = '';
+        if (this.currentTheme === 'Themelier Dark') mode = 'dark';
+        else if (this.currentTheme === 'Themelier Light') mode = 'light';
         return mode;
     }
 
@@ -78,20 +79,64 @@ export class Data {
         return (pick) ? [pick[0], pick[1]] : [];
     }
 
-    public setCurrent(mode, syntax, ui) {
+    public setCurrent(mode: string, syntaxUi: string[]) {
         this.context.globalState.update('thlMode', [mode]);
-        this.context.globalState.update('thlPick', [syntax, ui]);
+        this.context.globalState.update('thlPick', syntaxUi);
+    }
+
+    public get currentVer(): string {
+        return this.readJson('package.json', this.baseDir)['version'];
+    }
+
+    public get savedVer(): string {
+        let ver = this.context.globalState.get('thlVer');
+        return (ver) ? ver[0] : '';
+    }
+
+    public setVer(s: string = this.currentVer) {
+        this.context.globalState.update('thlVer', [s]);
+    }
+
+    public get isFirst() {
+        let first = this.context.globalState.get('thlFirst');
+        return (first) ? (!first) : true;
+    }
+
+    public setFirst(val: boolean) {
+        this.context.globalState.update('thlFirst', (!val));
     }
 
     // Reading specific theme files
-    public syntaxUiForPick() {
-        let savedPick = this.savedPick,
-            syntaxPath = path.join('syntax', this.flatten(this.syntax)[savedPick[0]]),
-            uiPath = path.join('ui', this.flatten(this.ui)[savedPick[1]]);
-        return {
-            "syntax": this.readJson(syntaxPath),
-            "ui": this.readJson(uiPath)
-        };
+
+    private userSettings(): {'syntax': {}, 'ui': {}} {
+        let worspaceConfig = vscode.workspace.getConfiguration('themelier'),
+            config = {'syntax': {}, 'ui': {}},
+            scopesKeys = Object.keys(this.scopes);
+        for (let item in worspaceConfig) {
+            if (worspaceConfig[item]) {
+                if (scopesKeys.indexOf(item) !== -1) config['syntax'][item] = worspaceConfig[item];
+                else config['ui'][item] = worspaceConfig[item];
+            }
+        }
+        return config;
+    }
+
+    public themeSyntaxUi(syntaxUiPick: string[] = this.savedPick, applyUserSettings: boolean = true): {'syntax': {}, 'ui': {}} {
+        let syntaxPath = path.join('syntax', this.flatten(this.syntax)[syntaxUiPick[0]]),
+            uiPath = path.join('ui', this.flatten(this.ui)[syntaxUiPick[1]]),
+            userSettings = this.userSettings(),
+            theming = {
+                'syntax': this.readJson(syntaxPath),
+                'ui': this.readJson(uiPath)
+            };
+        if (applyUserSettings) {
+            for (let syntaxOrUi in userSettings) {
+                for (let item in userSettings[syntaxOrUi]) {
+                    theming[syntaxOrUi][item] = userSettings[syntaxOrUi][item];
+                }
+            }
+        }
+        return theming;
     }
 
     // Scopes

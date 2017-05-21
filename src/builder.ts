@@ -9,11 +9,11 @@ export class Builder {
     }
 
     // General
-    public build(syntaxUiForPick: {'syntax': {}, 'ui': {}} = this.data.syntaxUiForPick(), mode: string = this.data.savedMode) {
+    public build(themeSyntaxUi: {'syntax': {}, 'ui': {}} = this.data.themeSyntaxUi(), mode: string = this.data.savedMode) {
 
         console.log('Building Themelier Theme');
-        let syntaxFile = syntaxUiForPick.syntax,
-            uiFile = syntaxUiForPick.ui,
+        let syntaxFile = themeSyntaxUi.syntax,
+            uiFile = themeSyntaxUi.ui,
             scopes = this.data.scopes,
             inheritance = this.data.inheritance,
             theme = {};
@@ -29,7 +29,7 @@ export class Builder {
             let key = 'global';
             if (syntaxFile.hasOwnProperty(theScopeKey)) {
                 key = theScopeKey;
-            } else if (inheritance.hasOwnProperty(theScopeKey)) {
+            } else if (inheritance.hasOwnProperty(theScopeKey) && syntaxFile.hasOwnProperty(inheritance[theScopeKey])) {
                 key = inheritance[theScopeKey];
             }
 
@@ -56,7 +56,7 @@ export class Builder {
             });
         }
 
-        theme['name'] = this.data.currentTheme;
+        theme['name'] = 'Themelier ' + mode.charAt(0).toUpperCase() + mode.slice(1); //this.data.currentTheme;
         theme['colors'] = uiFile;
         theme['tokenColors'] = tokenColors;
 
@@ -67,6 +67,34 @@ export class Builder {
 
     public firstBuild() {
 
+        ['dark', 'light'].forEach(mode => {
+
+            let syntaxKeys = this.data.syntaxKeys(mode),
+                uiKeys = this.data.uiKeys(mode);
+
+            if (syntaxKeys.length && uiKeys.length) {
+                // Choose first syntax and UI for each mode (dark/light) and discard user settings
+                let syntaxPick = syntaxKeys[0],
+                    uiPick = uiKeys[0],
+                    applyUserSettings = false;
+
+                if (mode === this.data.savedMode) {
+                    applyUserSettings = true;
+                    let savedPick = this.data.savedPick;
+                    if (syntaxKeys.indexOf(savedPick[0]) === -1) {
+                        this.data.setCurrent(mode, []);
+                        syntaxPick = savedPick[0];
+                    }
+                    if (uiKeys.indexOf(savedPick[1]) === -1) {
+                        this.data.setCurrent(mode, []);
+                        uiPick = savedPick[1];
+                    }
+                }
+                
+                let themeSyntaxUi = this.data.themeSyntaxUi([syntaxPick, uiPick], applyUserSettings);
+                this.build(themeSyntaxUi, mode);
+            }
+        });
     }
 
     dispose() {

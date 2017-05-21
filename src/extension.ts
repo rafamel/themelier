@@ -13,9 +13,19 @@ export function activate(context: vscode.ExtensionContext) {
         builder = new Builder(data),
         controller = new Controller(data, builder);
 
-    // Do first Build if Needed
-    if (!context.globalState.get('lastPick')) {
-        // builder.firstBuild();
+    // Do full build on new install and updates
+    if (data.isFirst || data.currentVer !== data.savedVer) {
+        data.setVer();
+        builder.firstBuild();
+        // if (data.isCurrent()) vscode.commands.executeCommand('workbench.action.reloadWindow');
+    }
+    // Offer theme choice at first install
+    if (data.isFirst) {
+        data.setFirst(false);
+        vscode.window.showInformationMessage('Themelier is active', { title: 'Choose a theme' }).then(function (item) {
+            if (!item) return;
+            controller.choose();
+        });
     }
 
     // Register Commands
@@ -33,6 +43,8 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 // Method called when the extension is deactivated
-export function deactivate() {
-
+export function deactivate(context: vscode.ExtensionContext) {
+    let data = new Data(context);
+    data.setFirst(true);
+    data.setVer('');
 }

@@ -60,7 +60,7 @@ export class Controller {
             vscode.window.showQuickPick(uiKeys).then(uiSel => {
                 if (!uiSel) return;
                 // Save Pick & Mode
-                this.data.setCurrent(currentMode, syntaxSel, uiSel);
+                this.data.setCurrent(currentMode, [syntaxSel, uiSel]);
                 // Build
                 this.build();
             });
@@ -69,12 +69,6 @@ export class Controller {
 
     // Building
     public build = () => {
-        
-        // Check Themelier is active
-        if (!this.data.isCurrent()) {
-            this.actionMsg('Your current theme is not Themelier Light or Themelier Dark. Please change it first.', 'Change', this.selectAndWaitToBuild);
-            return;
-        }
 
         // Ensure there is some pick of Syntax and UI themes
         if (!this.data.savedPick.length) {
@@ -83,8 +77,9 @@ export class Controller {
         }
 
         // As there was a previous pick saved, ensure its mode is the same as the current themelier Theme
-        let savedMode = this.data.savedMode;
-        if (savedMode !== this.data.currentMode()) {
+        let currentMode = this.data.currentMode(),
+            savedMode = this.data.savedMode;
+        if (currentMode && savedMode !== currentMode) {
             this.actionMsg('Your current theme is ' + this.data.currentTheme + ' while your last chosen Themelier UI was for ' + savedMode.charAt(0).toUpperCase() + savedMode.slice(1), 'Change', this.choose);
             return;
         }

@@ -1,6 +1,6 @@
 # Themelier
 
-Easy to personalize syntax and UI meta theme for VSCode with awesome out-of-the-box presets
+Easy to personalize syntax and UI meta theme / theme editor for VSCode, with awesome out-of-the-box presets
 
 ## This extension is under active development and NOT READY FOR USE
 
@@ -27,6 +27,7 @@ Easy to personalize syntax and UI meta theme for VSCode with awesome out-of-the-
     - `storage`: Such as `public`, `private`, `var` or `function`.
 
 - Inherit from **support**:
+    - `class`: Types and classes.
     - `constant`: Constants.
     - `reserved`: Reserved variables such as `this`, `self`, and `super`.
 

@@ -11,6 +11,7 @@
     "property": [
         "support.type.property-name",
         "support.variable.property",
+        "variable.other.property",
         "variable.other.object.property"
     ],
     "punctuation": [
@@ -27,9 +28,7 @@
         "punctuation.terminator"
     ],
     "function": [
-        "entity.name.class",
         "entity.name.function",
-        "entity.name.type",
         "entity.other.attribute-name",
         "entity.other.inherited-class",
         "markup.heading.setext",
@@ -48,12 +47,16 @@
         "keyword.operator"
     ],
     "support": [ "support" ],
-    "reserved": [ "variable.language" ],
+    "class": [
+        "entity.name.class",
+        "entity.name.type"
+    ],
     "constant": [
         "constant",
         "keyword.other.unit",
         "support.constant"
     ],
+    "reserved": [ "variable.language" ],
     "comment": [
         "comment"
     ],
