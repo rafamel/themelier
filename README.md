@@ -7,29 +7,46 @@ Easy to personalize syntax and UI meta theme / theme editor for VSCode, with awe
 ## Basic
 
 - `global`
-- `variable`
-- `function`
-- `keyword`: Such as `for`, `while`, and so on.
-- `operator`: Such as `+`, `-`, or `=`.
-- `support`: Built-in functions, modules, types, and classes.
-- `comment`
 - `string`
-- `htmlTag`
+- `comment`
+- `variable`
+- `property`
+- `function`
+- `keyword`
+- `operator`
+- `support`
+- `constant`
 
 ## Extended
 
-- Inherit from **variable**:
-    - `definition`: Variables at definition time (when possible) or when placed as a receiving a parameter of a function.
+- `global`
+    - `string`: Strings, also inlines and quotes in a markup language (like Markdown).
+    - `variable`:
+        - `definition`: Variables at definition time (when possible) or when placed as a receiving parameter of a function.
+        - `punctuation`: Brackets, colons, dots and other punctuation.
+
     - `property`: Variable properties (excluding functions).
-    - `punctuation`: Brackets, colons, dots and other punctuation.
+        - `htmlTag`: Such as `<link>`, `<div>`...
+        - `muHeading`: Headings, such as `# Heading` in a markup language (like Markdown).
 
-- Inherit from **keyword**:
-    - `storage`: Such as `public`, `private`, `var` or `function`.
+    - `function`:
+        - `htmlId`: Html id attribute: ( `id` ).
+        - `muLinkText`: The text part of a link in a markup language (like Markdown).
 
-- Inherit from **support**:
-    - `class`: Types and classes.
+    - `keyword`: Such as `for`, `while`, and so on.
+        - `storage`: Such as `public`, `private`, `var` or `function`.
+        - `muItalic`: Italic text in a markup language (like Markdown).
+
+    - `operator`: Such as `+`, `-`, or `=`.
+        - `muLinkUrl`: The url part of a link in a markup language (like Markdown).
+
+    - `support`: Built-in functions, modules, types, and classes.
+        - `class`: Types and classes.
+        - `reserved`: Reserved variables such as `this`, `self`, and `super`.
+
     - `constant`: Constants.
-    - `reserved`: Reserved variables such as `this`, `self`, and `super`.
+        - `htmlAttr`: Attributes such as `href`, `type`, or `class`.
+        - `muBold`: Bold text in a markup language (like Markdown).
 
 ## Settings
 

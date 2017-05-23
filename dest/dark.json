@@ -40,47 +40,52 @@
       }
     },
     {
-      "name": "property",
+      "name": "property, htmlTag, muHeading",
       "scope": [
         "support.type.property-name",
         "support.variable.property",
         "variable.other.property",
-        "variable.other.object.property"
+        "variable.other.object.property",
+        "entity.name.tag",
+        "markup.heading",
+        "markup beginning.punctuation.definition"
       ],
       "settings": {
         "foreground": "#E06C75"
       }
     },
     {
-      "name": "function",
+      "name": "function, htmlId, muLinkText",
       "scope": [
         "entity.name.function",
-        "entity.other.attribute-name",
         "entity.other.inherited-class",
-        "markup.heading.setext",
-        "support.function"
+        "support.function",
+        "entity.other.attribute-name.id",
+        "string.other.link.title"
       ],
       "settings": {
         "foreground": "#61AFEF"
       }
     },
     {
-      "name": "keyword, storage",
+      "name": "keyword, storage, muItalic",
       "scope": [
         "keyword",
         "punctuation.definition.keyword",
-        "markup.inline.raw",
         "storage",
-        "storage.type"
+        "storage.type",
+        "keyword.operator.new",
+        "markup.italic"
       ],
       "settings": {
         "foreground": "#C678DD"
       }
     },
     {
-      "name": "operator",
+      "name": "operator, muLinkUrl",
       "scope": [
-        "keyword.operator"
+        "keyword.operator",
+        "markup.underline.link"
       ],
       "settings": {
         "foreground": "#56B6C2"
@@ -99,11 +104,13 @@
       }
     },
     {
-      "name": "constant",
+      "name": "constant, htmlAttr, muBold",
       "scope": [
         "constant",
         "keyword.other.unit",
-        "support.constant"
+        "support.constant",
+        "entity.other.attribute-name",
+        "markup.bold"
       ],
       "settings": {
         "foreground": "#D19A66"
@@ -122,21 +129,29 @@
       "name": "string",
       "scope": [
         "string",
-        "markup.quote",
-        "markup.bold",
-        "markup.italic"
+        "markup.inline.raw",
+        "markup.quote"
       ],
       "settings": {
         "foreground": "#98C379"
       }
     },
     {
-      "name": "htmlTag",
+      "name": "Bolding",
       "scope": [
-        "entity.name.tag"
+        "markup.bold"
       ],
       "settings": {
-        "foreground": "#E06C75"
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "Italizing",
+      "scope": [
+        "markup.italic"
+      ],
+      "settings": {
+        "fontStyle": "italic"
       }
     }
   ]

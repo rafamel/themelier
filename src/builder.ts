@@ -58,6 +58,9 @@ export class Builder {
             });
         }
 
+        // Add common styles to tokenColors
+        tokenColors = tokenColors.concat(this.data.commonStyles);
+        
         theme['name'] = name;
         theme['colors'] = uiFile;
         theme['tokenColors'] = tokenColors;

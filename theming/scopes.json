@@ -29,9 +29,7 @@
     ],
     "function": [
         "entity.name.function",
-        "entity.other.attribute-name",
         "entity.other.inherited-class",
-        "markup.heading.setext",
         "support.function"
     ],
     "keyword": [
@@ -39,9 +37,9 @@
         "punctuation.definition.keyword"
     ],
     "storage": [
-        "markup.inline.raw",
         "storage",
-        "storage.type"
+        "storage.type",
+        "keyword.operator.new"
     ],
     "operator": [
         "keyword.operator"
@@ -62,11 +60,32 @@
     ],
     "string": [
         "string",
-        "markup.quote",
-        "markup.bold",
-        "markup.italic"
+        "markup.inline.raw",
+        "markup.quote"
     ],
     "htmlTag": [
         "entity.name.tag"
+    ],
+    "htmlAttr": [
+        "entity.other.attribute-name"
+    ],
+    "htmlId": [
+        "entity.other.attribute-name.id"
+    ],
+    "muHeading": [
+        "markup.heading",
+        "markup beginning.punctuation.definition"
+    ],
+    "muLinkText": [
+        "string.other.link.title"
+    ],
+    "muLinkUrl": [
+        "markup.underline.link"
+    ],
+    "muBold": [
+        "markup.bold"
+    ],
+    "muItalic": [
+        "markup.italic"
     ]
 }

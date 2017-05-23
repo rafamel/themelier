@@ -103,6 +103,34 @@
                 "themelier.htmlTag": {
                     "type": "string",
                     "default": ""
+                },
+                "themelier.htmlAttr": {
+                    "type": "string",
+                    "default": ""
+                },
+                "themelier.htmlId": {
+                    "type": "string",
+                    "default": ""
+                },
+                "themelier.muHeading": {
+                    "type": "string",
+                    "default": ""
+                },
+                "themelier.muLinkText": {
+                    "type": "string",
+                    "default": ""
+                },
+                "themelier.muLinkUrl": {
+                    "type": "string",
+                    "default": ""
+                },
+                "themelier.muBold": {
+                    "type": "string",
+                    "default": ""
+                },
+                "themelier.muItalic": {
+                    "type": "string",
+                    "default": ""
                 }
             }
         }

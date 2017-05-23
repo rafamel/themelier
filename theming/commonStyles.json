@@ -1,0 +1,12 @@
+[
+    {
+        "name": "Bolding",
+        "scope": [ "markup.bold" ],
+        "settings": { "fontStyle": "bold" }
+    },
+    {
+        "name": "Italizing",
+        "scope": [ "markup.italic" ],
+        "settings": { "fontStyle": "italic" }
+    }
+]

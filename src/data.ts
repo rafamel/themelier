@@ -12,6 +12,7 @@ export class Data {
     private _inheritance: {};
     private _syntax: {};
     private _ui: {};
+    private _commonStyles: Object[];
 
     constructor(private context: vscode.ExtensionContext) {
         this.baseDir = path.join(__dirname, '../../');
@@ -19,7 +20,7 @@ export class Data {
     }
 
     // Read and Parse JSON
-    private readJson(file: string, base: string = this.themingDir): {} { 
+    private readJson(file: string, base: string = this.themingDir) { 
         return JSON.parse(fs.readFileSync(path.join(base, file), 'utf8'));
     }
 
@@ -127,6 +128,12 @@ export class Data {
             }
         }
         return theming;
+    }
+
+    // Common Styles
+    public get commonStyles(): Object[] {
+        if (!this._commonStyles) this._commonStyles = this.readJson('commonStyles.json');
+        return this._commonStyles;
     }
 
     // Scopes

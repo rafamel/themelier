@@ -1,13 +1,12 @@
 {
     "global": "#ABB2BF",
+    "string": "#98C379",
+    "comment": "#5C6370",
     "variable": "#ABB2BF",
-        "property": "#E06C75",
+    "property": "#E06C75",
     "function": "#61AFEF",
     "keyword": "#C678DD",
     "operator": "#56B6C2",
     "support": "#E5C07B",
-        "constant": "#D19A66",
-    "comment": "#5C6370",
-    "string": "#98C379",
-    "htmlTag": "#E06C75"
+    "constant": "#D19A66"
 }
