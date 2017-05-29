@@ -1,9 +1,11 @@
 {   
     "dark": {
         "Dark": "dark.json",
-        "Atomic": "atomic-dark.json"
+        "Atomic": "atomic-dark.json",
+        "Atomic Pro": "atomic-pro-dark.json"
     },
     "light": {
+        "Light": "light.json",
         "Atomic": "atomic-light.json"
     }
 }

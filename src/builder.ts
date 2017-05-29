@@ -5,17 +5,15 @@ let tinycolor = require("tinycolor2");
 
 export class Builder {
 
-    constructor(private data: Data) {
+    constructor (private data: Data) {
 
     }
 
     // General
-    public build(themeSyntaxUi: {'syntax': {}, 'ui': {}, 'sidebarBack': Boolean} = this.data.themeSyntaxUi(), mode: string = this.data.savedMode) {
-
+    public build(themeSyntaxUi: {'syntax': {}, 'ui': {}} = this.data.themeSyntaxUi(), mode: string = this.data.savedMode) {
         let name =  'Themelier ' + mode.charAt(0).toUpperCase() + mode.slice(1), // this.data.currentTheme;
             syntaxFile = themeSyntaxUi.syntax,
             uiFile = themeSyntaxUi.ui,
-            sidebarBack = themeSyntaxUi.sidebarBack,
             syntaxScopes = this.data.scopes['syntax'],
             uiScopes = this.data.scopes['ui'],
             inheritance = this.data.inheritance,
@@ -62,21 +60,23 @@ export class Builder {
         }
 
         // Build UI / colors
-        let uiColors = { 'editor.foreground': syntaxFile['global'] };
-
         function lightenDarken(color: string, mod: Number): string {
             if (mod === 0) return color;
             let tColor = tinycolor(color);
-            tColor = (mode === 'light') ? tColor.darken(mod) : tColor.lighten(mod);
+
+            if (mod === -1) tColor = ((tColor.isDark()) ? tColor.lighten(85) : tColor.darken(85)).greyscale();
+            else tColor = (mode === 'light') ? tColor.greyscale().darken(mod) : tColor.lighten(mod);
+            
             return tColor.toHexString();
         }
 
-        if (sidebarBack) {
-            if (uiFile.hasOwnProperty('backBackground')) uiFile['sidebar'] = uiFile['backBackground'];
-            if (uiFile.hasOwnProperty('foreBackground')) uiFile['activityBar'] = uiFile['backBackground'];
-        } else {
-            if (uiFile.hasOwnProperty('backBackground')) uiFile['activityBar'] = uiFile['backBackground'];
-            if (uiFile.hasOwnProperty('foreBackground')) uiFile['sidebar'] = uiFile['foreBackground'];
+        let uiColors = {  'editor.foreground': syntaxFile['global'] };
+
+        if ((!uiFile.hasOwnProperty('activityBar')) && uiFile.hasOwnProperty('backBackground')) {
+            uiFile['activityBar'] = uiFile['backBackground'];
+        }
+        if ((!uiFile.hasOwnProperty('sidebar')) && uiFile.hasOwnProperty('foreBackground')) {
+            uiFile['sidebar'] = uiFile['foreBackground'];
         }
         
         for (let item in uiFile) {

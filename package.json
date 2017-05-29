@@ -75,11 +75,6 @@
             "foreBackground": "",
             "backBackground": ""
           }
-        },
-        "themelier.sidebarBack": {
-          "type": "string",
-          "description": "Ungroup the Sidebar background with the Editor (\"true\" or \"false\")",
-          "default": ""
         }
       }
     }

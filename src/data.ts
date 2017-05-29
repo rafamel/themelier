@@ -98,15 +98,12 @@ export class Data {
 
     // Reading user settings w/ specific theme files
 
-    private userSettings(): {'syntax': {}, 'ui': {}, 'sidebarBack': string} {
+    private userSettings(): {'syntax': {}, 'ui': {}} {
         const validColor = (color) => color.match(/^#[0-9a-f]{3,8}$/i) && (color.length === 4 || color.length === 7 || color.length === 9);
         let worspaceConfig = vscode.workspace.getConfiguration('themelier'),
-            config = {'syntax': {}, 'ui': {}, 'sidebarBack': ""};
+            config = {'syntax': {}, 'ui': {}};
 
-        // "syntax" and "ui"
-        let syntaxAndUI = ['syntax', 'ui'];
-        for (let i = 0; i < syntaxAndUI.length; i++) {
-            let syntaxOrUi = syntaxAndUI[i];
+        for (let syntaxOrUi in config) {
             if (worspaceConfig.hasOwnProperty(syntaxOrUi)) {
                 for (let item in worspaceConfig[syntaxOrUi]) {
                     let color = worspaceConfig[syntaxOrUi][item];
@@ -117,35 +114,25 @@ export class Data {
             }
         }
 
-        // "sidebarBack"
-        if (worspaceConfig.hasOwnProperty('sidebarBack')) config['sidebarBack'] = worspaceConfig['sidebarBack'];
-
         return config;
     }
 
-    public themeSyntaxUi(syntaxUiPick: string[] = this.savedPick, mode: string = this.savedMode, applyUserSettings: boolean = true): {'syntax': {}, 'ui': {}, 'sidebarBack': Boolean} {
+    public themeSyntaxUi(syntaxUiPick: string[] = this.savedPick, mode: string = this.savedMode, applyUserSettings: boolean = true): {'syntax': {}, 'ui': {}} {
         let syntaxPath = path.join('syntax', this.syntax[mode][syntaxUiPick[0]]),
             syntax = this.readJson(syntaxPath),
             uiPath =  path.join('ui', this.ui[mode][syntaxUiPick[1]]),
             ui = this.readJson(uiPath),
-            uiColors = ui['colors'],
-            uiSidebarBack = (ui.hasOwnProperty('sidebarBack')) ? ui['sidebarBack'] : false,
-            theming = { 'syntax': syntax, 'ui': uiColors, 'sidebarBack': uiSidebarBack };
+            theming = { 'syntax': syntax, 'ui': ui};
 
         if (applyUserSettings) {
-            let userSettings = this.userSettings(),
-                syntaxAndUI = ['syntax', 'ui'];
-            // "syntax" and "ui"
-            for (let i = 0; i < syntaxAndUI.length; i++) {
-                let syntaxOrUi = syntaxAndUI[i];
+            let userSettings = this.userSettings();
+            for (let syntaxOrUi in theming) {
                 if (userSettings.hasOwnProperty(syntaxOrUi)) {
                     for (let item in userSettings[syntaxOrUi]) {
                         theming[syntaxOrUi][item] = userSettings[syntaxOrUi][item];
                     }
                 }
             }
-            // "sidebarBack"
-            if (userSettings['sidebarBack']) theming['sidebarBack'] = Boolean(JSON.parse(userSettings['sidebarBack']));
         }
 
         return theming;

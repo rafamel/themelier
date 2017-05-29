@@ -30,7 +30,7 @@ If you choose `Empty Base Theme` when selecting your *base theme*, it will be co
 - `support`
 - `constant`
 
-All other scopes will inherit from these following the [inheritance rules](https://github.com/rafamel/themelier/docs/). Keep in mind some *base themes* could have defined some extra scopes (which would override the default inheritance from these), and you can too: [here's the full list of scopes you can use in your settings with their definition,](https://github.com/rafamel/themelier/docs/) should you ever need it.
+All other scopes will inherit from these following the [inheritance rules](https://github.com/rafamel/themelier/tree/master/docs). Keep in mind some *base themes* could have defined some extra scopes (which would override the default inheritance from these), and you can too: [here's the full list of scopes you can use in your settings with their definition,](https://github.com/rafamel/themelier/tree/master/docs) should you ever need it.
 
 An example of using `themelier.syntax` on your `settings.json` to define your own colors could be:
 
@@ -56,7 +56,7 @@ themelier.ui: {
 }
 ```
 
-You can also define selections, border, and buttons, as well as change the `fore-background`/`back-background` groupings. Check the [Extended UI Theming](https://github.com/rafamel/themelier/docs/).
+You can also define selections, border, and buttons, as well as change the `foreBackground`/`backBackground` groupings. Check the [Extended UI Theming](https://github.com/rafamel/themelier/tree/master/docs).
 
 ## Contribute
 
@@ -84,5 +84,5 @@ The built in syntax themes don't try to replicate the scoping rules of the origi
     * [One Dark Vivid](https://atom.io/themes/one-dark-vivid-syntax)
     * [Plastic](https://github.com/will-stone/plastic)
 * UI theme colors:
-
-**Enjoy!**
+    * [Atomic](https://github.com/atom)
+    * [Atomic Pro](https://github.com/Binaryify/OneDark-Pro)

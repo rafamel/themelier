@@ -4,12 +4,10 @@
             "editor.background": 0,
             "titleBar.activeBackground": 0,
             "tab.activeBackground": 0,
-            "notification.background": 0,
             "statusBar.background": 0,
+            "statusBar.foreground": -1,
             "statusBar.noFolderBackground": 0,
             "statusBarItem.hoverBackground": 5,
-            "editorWhitespace.foreground": 10,
-            "editorLineNumber.foreground": 17.5,
             "editorWidget.background": 0,
             "editorSuggestWidget.background": 0,
             "editorHoverWidget.background": 3,
@@ -27,25 +25,31 @@
         "sidebar": {
             "sideBar.background": 0,
             "sideBarSectionHeader.background": 5,
-            "list.activeSelectionBackground": 12.5,
             "list.inactiveSelectionBackground": 12.5,
+            "list.activeSelectionBackground": 12.5,
+            "list.activeSelectionForeground": -1,
             "list.focusBackground": 12.5,
             "list.hoverBackground": 7.5
         },
         "activityBar": {
-            "activityBar.background": 0
+            "activityBar.background": 0,
+            "activityBar.foreground": -1
         },
         "selection": {
             "editor.selectionBackground": 0,
             "editor.findMatchHighlightBackground": 5,
             "editor.findMatchBackground": 12.5
         },
+        "line": {
+            "editorWhitespace.foreground": 0,
+            "editorLineNumber.foreground": 0
+        },
         "border": {
             "contrastBorder": 0
         },
-        "buttons": {
-            "button.background": 0,
-            "activityBarBadge.background": 0
+        "badge": {
+            "activityBarBadge.background": 0,
+            "activityBarBadge.foreground": -1
         }
     },
     "syntax": {
@@ -62,8 +66,7 @@
             "support.variable.property",
             "variable.other.property",
             "variable.other.object.property",
-            "meta.object-literal.key",
-            "meta.array.literal string.quoted"
+            "meta.object-literal.key"
         ],
         "punctuation": [
             "meta.brace",
@@ -71,7 +74,6 @@
             "punctuation.definition.binding-pattern",
             "punctuation.definition.block",
             "punctuation.definition.dictionary",
-            "punctuation.definition.string",
             "punctuation.definition.tag",
             "punctuation.section",
             "punctuation.separator",

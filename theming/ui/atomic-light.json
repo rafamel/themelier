@@ -1,10 +1,9 @@
 {
-    "sidebarBack": true,
-    "colors": {
-        "foreBackground": "#FAFAFA",
-        "backBackground": "#EAEAEB",
-        "selection": "#E5E5E6",
-        "border": "#DBDBDC",
-        "buttons": "#DBDBDC"
-    }
+    "foreBackground": "#FAFAFA",
+    "backBackground": "#EAEAEB",
+    "sidebar": "#EAEAEB",
+    "selection": "#E5E5E6",
+    "line": "#C2C2C3",
+    "border": "#DBDBDC",
+    "badge": "#DBDBDC"
 }

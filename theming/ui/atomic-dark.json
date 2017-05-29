@@ -1,9 +1,8 @@
 {
-    "sidebarBack": true,
-    "colors": {
-        "foreBackground": "#292C33", 
-        "backBackground": "#22252A",
-        "selection": "#3F4450",
-        "buttons": "#577AC7"
-    }
+    "foreBackground": "#292C33", 
+    "backBackground": "#22252A",
+    "sidebar": "#22252A",
+    "selection": "#3F4450",
+    "line": "#4C5262",
+    "badge": "#577AC7"
 }
