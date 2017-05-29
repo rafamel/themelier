@@ -1,0 +1,14 @@
+{
+  "tokenColors": [
+    {
+      "name": "Bold",
+      "scope": [ "markup.bold" ],
+      "settings": { "fontStyle": "bold" }
+    },
+    {
+      "name": "Italic",
+      "scope": [ "markup.italic" ],
+      "settings": { "fontStyle": "italic" }
+    }
+  ]
+}

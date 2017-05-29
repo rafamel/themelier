@@ -6,6 +6,10 @@
         "One Monokai": "one-monokai.json",
         "One Monokai Soft": "one-monokai-soft.json",
         "Plastic": "plastic.json",
-        "Plastic Soft": "plastic-soft.json"
+        "Empty Base Theme": "empty-dark.json"
+    },
+    "light": {
+        "One Light": "one-light.json",
+        "Empty Base Theme": "empty-light.json"
     }
 }

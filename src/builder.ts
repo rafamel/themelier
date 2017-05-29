@@ -1,6 +1,7 @@
 'use strict';
 import * as vscode from 'vscode'; // VS Code extensibility API
 import { Data } from './data';
+let tinycolor = require("tinycolor2");
 
 export class Builder {
 
@@ -9,25 +10,27 @@ export class Builder {
     }
 
     // General
-    public build(themeSyntaxUi: {'syntax': {}, 'ui': {}} = this.data.themeSyntaxUi(), mode: string = this.data.savedMode) {
+    public build(themeSyntaxUi: {'syntax': {}, 'ui': {}, 'sidebarBack': Boolean} = this.data.themeSyntaxUi(), mode: string = this.data.savedMode) {
 
         let name =  'Themelier ' + mode.charAt(0).toUpperCase() + mode.slice(1), // this.data.currentTheme;
             syntaxFile = themeSyntaxUi.syntax,
             uiFile = themeSyntaxUi.ui,
-            scopes = this.data.scopes,
+            sidebarBack = themeSyntaxUi.sidebarBack,
+            syntaxScopes = this.data.scopes['syntax'],
+            uiScopes = this.data.scopes['ui'],
             inheritance = this.data.inheritance,
             theme = {};
 
         console.log('Building ' + name);
 
-        // Check the theme has `global` key
-        if (!syntaxFile.hasOwnProperty('global')) {
+        // Build Syntax / tokenColors
+        if (!syntaxFile.hasOwnProperty('global')) { // Check the theme has `global` key
             vscode.window.showInformationMessage('There is no "global" color on the chosen Themelier theme');
             return;
         }
         
         let syntaxColors = {'global': {'name': '', 'scope': []}};
-        for (let theScopeKey in scopes) {
+        for (let theScopeKey in syntaxScopes) {
             let key = 'global';
             if (syntaxFile.hasOwnProperty(theScopeKey)) {
                 key = theScopeKey;
@@ -37,13 +40,13 @@ export class Builder {
 
             if (syntaxColors.hasOwnProperty(key)) {
                 syntaxColors[key]['name'] += ', ' + theScopeKey;
-                syntaxColors[key]['scope'] = syntaxColors[key]['scope'].concat(scopes[theScopeKey]);
+                syntaxColors[key]['scope'] = syntaxColors[key]['scope'].concat(syntaxScopes[theScopeKey]);
             } else {
-                syntaxColors[key] = {'name': theScopeKey, 'scope': scopes[theScopeKey]};
+                syntaxColors[key] = {'name': theScopeKey, 'scope': syntaxScopes[theScopeKey]};
             }
-
         }
-        if (!syntaxColors['global']['scope'].length) delete syntaxColors['global'];
+        if (!syntaxColors['global']['scope'].length) delete syntaxColors['global']
+        else syntaxColors['global']['name'] = syntaxColors['global']['name'].slice(2);
 
         let tokenColors = [];
         tokenColors.push({'settings': {'foreground': syntaxFile['global']}});
@@ -58,11 +61,38 @@ export class Builder {
             });
         }
 
-        // Add common styles to tokenColors
-        tokenColors = tokenColors.concat(this.data.commonStyles);
+        // Build UI / colors
+        let uiColors = { 'editor.foreground': syntaxFile['global'] };
+
+        function lightenDarken(color: string, mod: Number): string {
+            if (mod === 0) return color;
+            let tColor = tinycolor(color);
+            tColor = (mode === 'light') ? tColor.darken(mod) : tColor.lighten(mod);
+            return tColor.toHexString();
+        }
+
+        if (sidebarBack) {
+            if (uiFile.hasOwnProperty('backBackground')) uiFile['sidebar'] = uiFile['backBackground'];
+            if (uiFile.hasOwnProperty('foreBackground')) uiFile['activityBar'] = uiFile['backBackground'];
+        } else {
+            if (uiFile.hasOwnProperty('backBackground')) uiFile['activityBar'] = uiFile['backBackground'];
+            if (uiFile.hasOwnProperty('foreBackground')) uiFile['sidebar'] = uiFile['foreBackground'];
+        }
         
+        for (let item in uiFile) {
+            if (uiScopes.hasOwnProperty(item)) {
+                for (let scope in uiScopes[item]) {
+                    let color = uiFile[item],
+                        mod = uiScopes[item][scope];
+                    uiColors[scope] = lightenDarken(color, mod);
+                }
+            }
+        }
+        
+        // Put the theme together
         theme['name'] = name;
-        theme['colors'] = uiFile;
+        theme['include'] = './common.json';
+        theme['colors'] = uiColors;
         theme['tokenColors'] = tokenColors;
 
         this.data.writeTheme(mode, theme);

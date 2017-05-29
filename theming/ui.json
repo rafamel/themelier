@@ -1,6 +1,9 @@
-{
+{   
     "dark": {
-        "Lier Dark": "lier-dark.json",
-        "Atomic": "atomic.json"
+        "Dark": "dark.json",
+        "Atomic": "atomic-dark.json"
+    },
+    "light": {
+        "Atomic": "atomic-light.json"
     }
 }

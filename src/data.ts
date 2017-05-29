@@ -12,7 +12,6 @@ export class Data {
     private _inheritance: {};
     private _syntax: {};
     private _ui: {};
-    private _commonStyles: Object[];
 
     constructor(private context: vscode.ExtensionContext) {
         this.baseDir = path.join(__dirname, '../../');
@@ -98,42 +97,58 @@ export class Data {
     }
 
     // Reading user settings w/ specific theme files
-    
-    private userSettings(): {'syntax': {}, 'ui': {}} {
-        let worspaceConfig = vscode.workspace.getConfiguration('themelier'),
-            config = {'syntax': {}, 'ui': {}},
-            scopesKeys = Object.keys(this.scopes);
-        for (let item in worspaceConfig) {
-            if (worspaceConfig[item]) {
-                if (scopesKeys.indexOf(item) !== -1) config['syntax'][item] = worspaceConfig[item];
-                else config['ui'][item] = worspaceConfig[item];
-            }
-        }
-        return config;
-    }
 
-    public themeSyntaxUi(syntaxUiPick: string[] = this.savedPick, mode: string = this.savedMode, applyUserSettings: boolean = true): {'syntax': {}, 'ui': {}} {
-        let syntaxPath = path.join('syntax', this.syntax[mode][syntaxUiPick[0]]),
-            uiPath = path.join('ui', this.ui[mode][syntaxUiPick[1]]),
-            userSettings = this.userSettings(),
-            theming = {
-                'syntax': this.readJson(syntaxPath),
-                'ui': this.readJson(uiPath)
-            };
-        if (applyUserSettings) {
-            for (let syntaxOrUi in userSettings) {
-                for (let item in userSettings[syntaxOrUi]) {
-                    theming[syntaxOrUi][item] = userSettings[syntaxOrUi][item];
+    private userSettings(): {'syntax': {}, 'ui': {}, 'sidebarBack': string} {
+        const validColor = (color) => color.match(/^#[0-9a-f]{3,8}$/i) && (color.length === 4 || color.length === 7 || color.length === 9);
+        let worspaceConfig = vscode.workspace.getConfiguration('themelier'),
+            config = {'syntax': {}, 'ui': {}, 'sidebarBack': ""};
+
+        // "syntax" and "ui"
+        let syntaxAndUI = ['syntax', 'ui'];
+        for (let i = 0; i < syntaxAndUI.length; i++) {
+            let syntaxOrUi = syntaxAndUI[i];
+            if (worspaceConfig.hasOwnProperty(syntaxOrUi)) {
+                for (let item in worspaceConfig[syntaxOrUi]) {
+                    let color = worspaceConfig[syntaxOrUi][item];
+                    if (validColor(color) && this.scopes[syntaxOrUi].hasOwnProperty(item)) {
+                        config[syntaxOrUi][item] = worspaceConfig[syntaxOrUi][item];
+                    }
                 }
             }
         }
-        return theming;
+
+        // "sidebarBack"
+        if (worspaceConfig.hasOwnProperty('sidebarBack')) config['sidebarBack'] = worspaceConfig['sidebarBack'];
+
+        return config;
     }
 
-    // Common Styles
-    public get commonStyles(): Object[] {
-        if (!this._commonStyles) this._commonStyles = this.readJson('commonStyles.json');
-        return this._commonStyles;
+    public themeSyntaxUi(syntaxUiPick: string[] = this.savedPick, mode: string = this.savedMode, applyUserSettings: boolean = true): {'syntax': {}, 'ui': {}, 'sidebarBack': Boolean} {
+        let syntaxPath = path.join('syntax', this.syntax[mode][syntaxUiPick[0]]),
+            syntax = this.readJson(syntaxPath),
+            uiPath =  path.join('ui', this.ui[mode][syntaxUiPick[1]]),
+            ui = this.readJson(uiPath),
+            uiColors = ui['colors'],
+            uiSidebarBack = (ui.hasOwnProperty('sidebarBack')) ? ui['sidebarBack'] : false,
+            theming = { 'syntax': syntax, 'ui': uiColors, 'sidebarBack': uiSidebarBack };
+
+        if (applyUserSettings) {
+            let userSettings = this.userSettings(),
+                syntaxAndUI = ['syntax', 'ui'];
+            // "syntax" and "ui"
+            for (let i = 0; i < syntaxAndUI.length; i++) {
+                let syntaxOrUi = syntaxAndUI[i];
+                if (userSettings.hasOwnProperty(syntaxOrUi)) {
+                    for (let item in userSettings[syntaxOrUi]) {
+                        theming[syntaxOrUi][item] = userSettings[syntaxOrUi][item];
+                    }
+                }
+            }
+            // "sidebarBack"
+            if (userSettings['sidebarBack']) theming['sidebarBack'] = Boolean(JSON.parse(userSettings['sidebarBack']));
+        }
+
+        return theming;
     }
 
     // Scopes

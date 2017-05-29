@@ -1,91 +1,152 @@
-{
-    "variable": [
-        "support.variable",
-        "variable",
-        "punctuation.definition.variable"
-    ],
-    "definition": [
-        "meta.definition.variable variable",
-        "variable.parameter"
-    ],
-    "property": [
-        "support.type.property-name",
-        "support.variable.property",
-        "variable.other.property",
-        "variable.other.object.property"
-    ],
-    "punctuation": [
-        "meta.brace",
-        "punctuation.definition.array",
-        "punctuation.definition.binding-pattern",
-        "punctuation.definition.block",
-        "punctuation.definition.dictionary",
-        "punctuation.definition.string",
-        "punctuation.definition.tag",
-        "punctuation.section",
-        "punctuation.separator",
-        "punctuation.support",
-        "punctuation.terminator"
-    ],
-    "function": [
-        "entity.name.function",
-        "entity.other.inherited-class",
-        "support.function"
-    ],
-    "keyword": [
-        "keyword",
-        "punctuation.definition.keyword"
-    ],
-    "storage": [
-        "storage",
-        "storage.type",
-        "keyword.operator.new"
-    ],
-    "operator": [
-        "keyword.operator"
-    ],
-    "support": [ "support" ],
-    "class": [
-        "entity.name.class",
-        "entity.name.type"
-    ],
-    "constant": [
-        "constant",
-        "keyword.other.unit",
-        "support.constant"
-    ],
-    "reserved": [ "variable.language" ],
-    "comment": [
-        "comment"
-    ],
-    "string": [
-        "string",
-        "markup.inline.raw",
-        "markup.quote"
-    ],
-    "htmlTag": [
-        "entity.name.tag"
-    ],
-    "htmlAttr": [
-        "entity.other.attribute-name"
-    ],
-    "htmlId": [
-        "entity.other.attribute-name.id"
-    ],
-    "muHeading": [
-        "markup.heading",
-        "markup beginning.punctuation.definition"
-    ],
-    "muLinkText": [
-        "string.other.link.title"
-    ],
-    "muLinkUrl": [
-        "markup.underline.link"
-    ],
-    "muBold": [
-        "markup.bold"
-    ],
-    "muItalic": [
-        "markup.italic"
-    ]
+{   
+    "ui": {
+        "foreBackground": {
+            "editor.background": 0,
+            "titleBar.activeBackground": 0,
+            "tab.activeBackground": 0,
+            "notification.background": 0,
+            "statusBar.background": 0,
+            "statusBar.noFolderBackground": 0,
+            "statusBarItem.hoverBackground": 5,
+            "editorWhitespace.foreground": 10,
+            "editorLineNumber.foreground": 17.5,
+            "editorWidget.background": 0,
+            "editorSuggestWidget.background": 0,
+            "editorHoverWidget.background": 3,
+            "editorHoverWidget.border": 10,
+            "editorSuggestWidget.border": 10,
+            "editorSuggestWidget.selectedBackground": 5
+        },
+        "backBackground": {
+            "peekViewEditor.background": 0,
+            "input.background": 0,
+            "tab.inactiveBackground": 0,
+            "editorGroup.background": 0,
+            "editorGroupHeader.tabsBackground": 0
+        },
+        "sidebar": {
+            "sideBar.background": 0,
+            "sideBarSectionHeader.background": 5,
+            "list.activeSelectionBackground": 12.5,
+            "list.inactiveSelectionBackground": 12.5,
+            "list.focusBackground": 12.5,
+            "list.hoverBackground": 7.5
+        },
+        "activityBar": {
+            "activityBar.background": 0
+        },
+        "selection": {
+            "editor.selectionBackground": 0,
+            "editor.findMatchHighlightBackground": 5,
+            "editor.findMatchBackground": 12.5
+        },
+        "border": {
+            "contrastBorder": 0
+        },
+        "buttons": {
+            "button.background": 0,
+            "activityBarBadge.background": 0
+        }
+    },
+    "syntax": {
+        "variable": [
+            "variable",
+            "punctuation.definition.variable"
+        ],
+        "definition": [
+            "meta.definition.variable variable",
+            "variable.parameter"
+        ],
+        "property": [
+            "support.type.property-name",
+            "support.variable.property",
+            "variable.other.property",
+            "variable.other.object.property",
+            "meta.object-literal.key",
+            "meta.array.literal string.quoted"
+        ],
+        "punctuation": [
+            "meta.brace",
+            "punctuation.definition.array",
+            "punctuation.definition.binding-pattern",
+            "punctuation.definition.block",
+            "punctuation.definition.dictionary",
+            "punctuation.definition.string",
+            "punctuation.definition.tag",
+            "punctuation.section",
+            "punctuation.separator",
+            "punctuation.support",
+            "punctuation.terminator"
+        ],
+        "function": [
+            "entity.name.function",
+            "support.function"
+        ],
+        "keyword": [
+            "keyword",
+            "punctuation.definition.keyword"
+        ],
+        "storage": [
+            "storage",
+            "keyword.operator.new"
+        ],
+        "operator": [
+            "keyword.operator"
+        ],
+        "support": [ 
+            "support",
+            "storage.type.core"
+        ],
+        "class": [
+            "entity.name.class",
+            "entity.other.inherited-class",
+            "entity.name.type",
+            "storage.class"
+        ],
+        "constant": [
+            "constant",
+            "keyword.other.unit",
+            "support.constant",
+            "variable.other.constant"
+        ],
+        "reserved": [ "variable.language" ],
+        "comment": [
+            "comment"
+        ],
+        "string": [
+            "string",
+            "markup.inline.raw",
+            "markup.quote"
+        ],
+        "htmlTag": [
+            "entity.name.tag"
+        ],
+        "htmlAttr": [
+            "entity.other.attribute-name"
+        ],
+        "htmlId": [
+            "entity.other.attribute-name.id"
+        ],
+        "cssProperty": [
+            "support.type.property-name.css",
+            "support.type.property-name.sass",
+            "support.type.property-name.scss"
+        ],
+        "mkHeading": [
+            "markup.heading",
+            "markup beginning.punctuation.definition"
+        ],
+        "mkLinkText": [
+            "string.other.link.title"
+        ],
+        "mkLinkUrl": [
+            "markup.underline.link"
+        ],
+        "mkBold": [
+            "markup.bold"
+        ],
+        "mkItalic": [
+            "markup.italic"
+        ]
+    }
 }

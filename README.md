@@ -2,13 +2,26 @@
 
 Easy to personalize syntax and UI meta theme / theme editor for VSCode, with awesome out-of-the-box presets
 
+Similar to [vscode-theme-generator](https://github.com/Tyriar/vscode-theme-generator)
+
 ## This extension is under active development and NOT READY FOR USE
 
-## Basic
+## Settings
+
+You can build upon the *Themelier* base theme of your choice, both for syntax and UI by using the `themelier.syntax` and `themelier.ui` user settings. Whenever you define a specific color for some scope, it will overrule the one defined by the *base theme*.
+
+Keep in mind **colors must be in hexadecimal format,** otherwise they'll be ignored.
+
+### Syntax Theme
+
+These are the basic building blocks for a **syntax theme** and are defined by the `themelier.syntax` object in your `settings.json`. If any of these keys is not defined, the one defined by the *base theme* of your choice will be used.
+
+If you choose `Empty Base Theme` when selecting your *base theme*, it will be completely up to you to define each; if any is not defined, it will inherit from `global`.
 
 - `global`
 - `string`
 - `comment`
+- `punctuation`
 - `variable`
 - `property`
 - `function`
@@ -17,45 +30,33 @@ Easy to personalize syntax and UI meta theme / theme editor for VSCode, with awe
 - `support`
 - `constant`
 
-## Extended
+All other scopes will inherit from these following the [inheritance rules](https://github.com/rafamel/themelier/docs/). Keep in mind some *base themes* could have defined some extra scopes (which would override the default inheritance from these), and you can too: [here's the full list of scopes you can use in your settings with their definition,](https://github.com/rafamel/themelier/docs/) should you ever need it.
 
-- `global`
-    - `string`: Strings, also inlines and quotes in a markup language (like Markdown).
-    - `variable`:
-        - `definition`: Variables at definition time (when possible) or when placed as a receiving parameter of a function.
-        - `punctuation`: Brackets, colons, dots and other punctuation.
+An example of using `themelier.syntax` on your `settings.json` to define your own colors could be:
 
-    - `property`: Variable properties (excluding functions).
-        - `htmlTag`: Such as `<link>`, `<div>`...
-        - `muHeading`: Headings, such as `# Heading` in a markup language (like Markdown).
+```javascript
+themelier.syntax: {
+    "keyword": "#FFF",
+    "comment": "#5C6370"
+}
+```
 
-    - `function`:
-        - `htmlId`: Html id attribute: ( `id` ).
-        - `muLinkText`: The text part of a link in a markup language (like Markdown).
+### UI Theme
 
-    - `keyword`: Such as `for`, `while`, and so on.
-        - `storage`: Such as `public`, `private`, `var` or `function`.
-        - `muItalic`: Italic text in a markup language (like Markdown).
+You can define these in the `themelier.ui` object of your `settings.json`. You only have to define two main colors to start up:
 
-    - `operator`: Such as `+`, `-`, or `=`.
-        - `muLinkUrl`: The url part of a link in a markup language (like Markdown).
+- `foreBackground`: Main background color: Editor, Title Bar,  Notifications, and Sidebar.
+- `backBackground`: Secondary background color: Activity Bar, Peek View, and Input.
 
-    - `support`: Built-in functions, modules, types, and classes.
-        - `class`: Types and classes.
-        - `reserved`: Reserved variables such as `this`, `self`, and `super`.
+Example:
 
-    - `constant`: Constants.
-        - `htmlAttr`: Attributes such as `href`, `type`, or `class`.
-        - `muBold`: Bold text in a markup language (like Markdown).
+```javascript
+themelier.ui: {
+    "foreBackground": "#333",
+}
+```
 
-## Settings
-
-...
-
-
-## To Do
-
-- Add Light themes.
+You can also define selections, border, and buttons, as well as change the `fore-background`/`back-background` groupings. Check the [Extended UI Theming](https://github.com/rafamel/themelier/docs/).
 
 ## Contribute
 
@@ -65,50 +66,23 @@ Pull requests for new base themes for syntax and UI are also encouraged, particu
 
 ----
 
-This is the README for your extension "themelier". After writing up a brief description, we recommend including the following sections.
-
 ## Features
-
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
 
 ## Requirements
 
 If you have any requirements or dependencies, add a section describing those and how to install and configure them.
 
-## Extension Settings
+## Built-in Themes
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+The built in syntax themes don't try to replicate the scoping rules of the original themes, as the point of *Themelier* is to introduce universal scoping rules that *make sense* regardless of the specific colors used. They are adaptations of the original themes in the way that tries to make the most sense with *Themelier* scoping rules.
 
-For example:
+## Credits
 
-This extension contributes the following settings:
-
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on OSX or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on OSX or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (OSX) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+* [Code Samples](https://github.com/akamud/vscode-theme-onedark)
+* Syntax theme colors:
+    * [One Dark](https://atom.io/themes/one-dark-syntax)
+    * [One Dark Vivid](https://atom.io/themes/one-dark-vivid-syntax)
+    * [Plastic](https://github.com/will-stone/plastic)
+* UI theme colors:
 
 **Enjoy!**

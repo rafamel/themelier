@@ -1,0 +1,9 @@
+{
+    "sidebarBack": true,
+    "colors": {
+        "foreBackground": "#292C33", 
+        "backBackground": "#22252A",
+        "selection": "#3F4450",
+        "buttons": "#577AC7"
+    }
+}

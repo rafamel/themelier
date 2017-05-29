@@ -1,13 +1,40 @@
 {
   "name": "Themelier Dark",
+  "include": "./common.json",
   "colors": {
-    "editor.background": "#1E1E1E",
-    "sideBar.background": "#1E1E1E",
-    "titleBar.activeBackground": "#1E1E1E",
-    "statusBar.background": "#222222",
-    "peekViewEditor.background": "#222222",
-    "activityBar.background": "#222222",
-    "tab.inactiveBackground": "#282828"
+    "editor.foreground": "#ABB2BF",
+    "editor.background": "#292C33",
+    "titleBar.activeBackground": "#292C33",
+    "tab.activeBackground": "#292C33",
+    "notification.background": "#292C33",
+    "statusBar.background": "#292C33",
+    "statusBar.noFolderBackground": "#292C33",
+    "statusBarItem.hoverBackground": "#343841",
+    "editorWhitespace.foreground": "#40444f",
+    "editorLineNumber.foreground": "#515764",
+    "editorWidget.background": "#292C33",
+    "editorSuggestWidget.background": "#292C33",
+    "editorHoverWidget.background": "#30333b",
+    "editorHoverWidget.border": "#40444f",
+    "editorSuggestWidget.border": "#40444f",
+    "editorSuggestWidget.selectedBackground": "#343841",
+    "peekViewEditor.background": "#22252A",
+    "input.background": "#22252A",
+    "tab.inactiveBackground": "#22252A",
+    "editorGroup.background": "#22252A",
+    "editorGroupHeader.tabsBackground": "#22252A",
+    "editor.selectionBackground": "#3F4450",
+    "editor.findMatchHighlightBackground": "#4a505e",
+    "editor.findMatchBackground": "#5b6274",
+    "button.background": "#577AC7",
+    "activityBarBadge.background": "#577AC7",
+    "activityBar.background": "#22252A",
+    "sideBar.background": "#292C33",
+    "sideBarSectionHeader.background": "#343841",
+    "list.activeSelectionBackground": "#454a56",
+    "list.inactiveSelectionBackground": "#454a56",
+    "list.focusBackground": "#454a56",
+    "list.hoverBackground": "#3a3e48"
   },
   "tokenColors": [
     {
@@ -18,7 +45,6 @@
     {
       "name": "variable, definition, punctuation",
       "scope": [
-        "support.variable",
         "variable",
         "punctuation.definition.variable",
         "meta.definition.variable variable",
@@ -40,13 +66,18 @@
       }
     },
     {
-      "name": "property, htmlTag, muHeading",
+      "name": "property, htmlTag, cssProperty, mkHeading",
       "scope": [
         "support.type.property-name",
         "support.variable.property",
         "variable.other.property",
         "variable.other.object.property",
+        "meta.object-literal.key",
+        "meta.array.literal string.quoted",
         "entity.name.tag",
+        "support.type.property-name.css",
+        "support.type.property-name.sass",
+        "support.type.property-name.scss",
         "markup.heading",
         "markup beginning.punctuation.definition"
       ],
@@ -55,10 +86,9 @@
       }
     },
     {
-      "name": "function, htmlId, muLinkText",
+      "name": "function, htmlId, mkLinkText",
       "scope": [
         "entity.name.function",
-        "entity.other.inherited-class",
         "support.function",
         "entity.other.attribute-name.id",
         "string.other.link.title"
@@ -68,12 +98,11 @@
       }
     },
     {
-      "name": "keyword, storage, muItalic",
+      "name": "keyword, storage, mkItalic",
       "scope": [
         "keyword",
         "punctuation.definition.keyword",
         "storage",
-        "storage.type",
         "keyword.operator.new",
         "markup.italic"
       ],
@@ -82,7 +111,7 @@
       }
     },
     {
-      "name": "operator, muLinkUrl",
+      "name": "operator, mkLinkUrl",
       "scope": [
         "keyword.operator",
         "markup.underline.link"
@@ -95,8 +124,11 @@
       "name": "support, class, reserved",
       "scope": [
         "support",
+        "storage.type.core",
         "entity.name.class",
+        "entity.other.inherited-class",
         "entity.name.type",
+        "storage.class",
         "variable.language"
       ],
       "settings": {
@@ -104,11 +136,12 @@
       }
     },
     {
-      "name": "constant, htmlAttr, muBold",
+      "name": "constant, htmlAttr, mkBold",
       "scope": [
         "constant",
         "keyword.other.unit",
         "support.constant",
+        "variable.other.constant",
         "entity.other.attribute-name",
         "markup.bold"
       ],
@@ -134,24 +167,6 @@
       ],
       "settings": {
         "foreground": "#98C379"
-      }
-    },
-    {
-      "name": "Bolding",
-      "scope": [
-        "markup.bold"
-      ],
-      "settings": {
-        "fontStyle": "bold"
-      }
-    },
-    {
-      "name": "Italizing",
-      "scope": [
-        "markup.italic"
-      ],
-      "settings": {
-        "fontStyle": "italic"
       }
     }
   ]

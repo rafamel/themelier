@@ -1,9 +1,9 @@
 {
-    "variable": ["definition", "punctuation"],
-    "property": ["htmlTag", "muHeading"],
-    "function": ["htmlId", "muLinkText"],
-    "keyword": ["storage", "muItalic"],
-    "operator": ["muLinkUrl"],
+    "variable": ["definition"],
+    "property": ["htmlTag", "cssProperty", "mkHeading"],
+    "function": ["htmlId", "mkLinkText"],
+    "keyword": ["storage", "mkItalic"],
+    "operator": ["mkLinkUrl"],
     "support": ["class", "reserved"],
-    "constant": ["htmlAttr", "muBold"]
+    "constant": ["htmlAttr", "mkBold"]
 }
