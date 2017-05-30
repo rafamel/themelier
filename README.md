@@ -55,30 +55,38 @@ These are the basic building blocks for a **syntax theme** and are defined by th
 
 If you choose `Empty Base Theme` when selecting your *base theme*, it will be completely up to you to define each; if any is not defined, it will inherit from `global`.
 
-The basic scopes are:
+Here are some basic scopes and inheritance rules:
 
-- `global`
-- `string`
-- `comment`
-- `punctuation`
-- `variable`
-- `property`
-- `function`
-- `keyword`
-- `operator`
-- `support`
-- `constant`
+- `global`: The color all non-defined scopes fall back to; text.
+- `string`: Strings, also inlines and quotes in a markup language (like Markdown).
+- `comment`: Comments.
+- `punctuation`: Brackets, colons, dots and other punctuation.
+- `variable`: Variables.
+- `property`: Object keys and variable properties (excluding functions).
+- `function`: Function names.
+- `keyword`: Such as `for`, `while`, and so on.
+    - `storage`: Such as `public`, `private`, `var` or `function`.
+- `operator`: Such as `+`, `-`, or `=`.
+- `support`: Built-in functions, modules, types, and classes. Also primitives.
+    - `reserved`: Reserved variables such as `this`, `self`, and `super`.
+    - `class`: Non built-in types and classes.
+- `constant`: Constants.
 
-All other scopes will inherit from these following the [inheritance rules](https://github.com/rafamel/themelier/tree/master/docs). Keep in mind some *base themes* could have defined some extra scopes (which would override the default inheritance from these), and you can too: [here's the full list of scopes you can use in your settings with their definition,](https://github.com/rafamel/themelier/tree/master/docs) should you ever need it.
-
-An example of using `themelier.syntax` on your `settings.json` to define your own colors could be:
+An example of `themelier.syntax` using these could be:
 
 ```javascript
 themelier.syntax: {
-    "keyword": "#FFF",
-    "comment": "#5C6370"
+    "storage": "#FFF",
+    "support": "#E5C07B",
+    "reserved": "#D19A66"
 }
 ```
+
+This would:
+- Make `storage` (which initially inherited from `keyword`) be white, while maintaining the color defined by the current *base theme* for `keyword`.
+- Make `support` be `#E5C07B` (and therefore, also `class`, as it inherits from `support`, as long as your current base theme doesn't have a specific `class` color). However, `reserved` (which originally also inherited from `support`) will now be `#D19A66`.
+
+Keep in mind some *base themes* could have defined some extra scopes (which would override the default inheritance), and you can too: [here's the full list of scopes and inheritance rules](https://github.com/rafamel/themelier/tree/master/docs), should you ever need it.
 
 ### UI Theming
 
@@ -108,15 +116,6 @@ Discussions regarding a different inheritance structure and groupings for scopes
 Pull requests for new base themes for syntax and UI are also encouraged, particularly light themes, since there are not many yet.
 
 The themes live in the `theming/syntax` and `theming/ui` folders of the repo.
-
-----
-
-
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-.
 
 ## Credits
 

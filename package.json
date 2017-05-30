@@ -63,8 +63,11 @@
             "property": "",
             "function": "",
             "keyword": "",
+            "storage": "",
             "operator": "",
             "support": "",
+            "reserved": "",
+            "class": "",
             "constant": ""
           }
         },
