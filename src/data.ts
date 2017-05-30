@@ -19,7 +19,7 @@ export class Data {
     }
 
     // Read and Parse JSON
-    private readJson(file: string, base: string = this.themingDir) { 
+    private readJson(file: string, base: string = this.themingDir) {
         return JSON.parse(fs.readFileSync(path.join(base, file), 'utf8'));
     }
 
@@ -96,9 +96,8 @@ export class Data {
         this.context.globalState.update('thlFirst', (!val));
     }
 
-    // Reading user settings w/ specific theme files
-
-    private userSettings(): {'syntax': {}, 'ui': {}} {
+    // User Settings
+    private userSetSyntaxUi(): {'syntax': {}, 'ui': {}} {
         const validColor = (color) => color.match(/^#[0-9a-f]{3,8}$/i) && (color.length === 4 || color.length === 7 || color.length === 9);
         let worspaceConfig = vscode.workspace.getConfiguration('themelier'),
             config = {'syntax': {}, 'ui': {}};
@@ -113,10 +112,10 @@ export class Data {
                 }
             }
         }
-
         return config;
     }
 
+    // Reading user settings w/ specific theme files
     public themeSyntaxUi(syntaxUiPick: string[] = this.savedPick, mode: string = this.savedMode, applyUserSettings: boolean = true): {'syntax': {}, 'ui': {}} {
         let syntaxPath = path.join('syntax', this.syntax[mode][syntaxUiPick[0]]),
             syntax = this.readJson(syntaxPath),
@@ -125,7 +124,7 @@ export class Data {
             theming = { 'syntax': syntax, 'ui': ui};
 
         if (applyUserSettings) {
-            let userSettings = this.userSettings();
+            let userSettings = this.userSetSyntaxUi();
             for (let syntaxOrUi in theming) {
                 if (userSettings.hasOwnProperty(syntaxOrUi)) {
                     for (let item in userSettings[syntaxOrUi]) {

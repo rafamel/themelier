@@ -9,6 +9,32 @@ export class Builder {
 
     }
 
+    // Color Modifications
+
+    private uiLightenDarken(color: string, mod: Number, mode: string): string {
+        if (mod === 0) return color;
+        let tColor = tinycolor(color);
+
+        if (mod === -1) tColor = ((tColor.isDark()) ? tColor.lighten(85) : tColor.darken(85)).greyscale();
+        else tColor = (mode === 'light') ? tColor.greyscale().darken(mod) : tColor.lighten(mod);
+        
+        return tColor.toHexString();
+    }
+
+    private syntaxColorModify(color: string): string {
+        let worspaceConfig = vscode.workspace.getConfiguration('themelier'),
+            light = worspaceConfig['light'],
+            saturation = worspaceConfig['saturation'];
+        
+        if (light === 0 && saturation === 0) return color;
+        let tColor = tinycolor(color);
+
+        if (light !== 0) tColor = (light > 0) ? tColor.lighten(light) : tColor.darken(Math.abs(light));
+        if (saturation !== 0) tColor = (saturation > 0) ? tColor.saturate(saturation) : tColor.desaturate(Math.abs(saturation));
+
+        return tColor.toHexString();
+    }
+
     // General
     public build(themeSyntaxUi: {'syntax': {}, 'ui': {}} = this.data.themeSyntaxUi(), mode: string = this.data.savedMode) {
         let name =  'Themelier ' + mode.charAt(0).toUpperCase() + mode.slice(1), // this.data.currentTheme;
@@ -47,29 +73,19 @@ export class Builder {
         else syntaxColors['global']['name'] = syntaxColors['global']['name'].slice(2);
 
         let tokenColors = [];
-        tokenColors.push({'settings': {'foreground': syntaxFile['global']}});
+        tokenColors.push({'settings': {'foreground': this.syntaxColorModify(syntaxFile['global'])}});
         
         for (let item in syntaxColors) {
             tokenColors.push({
                 "name": syntaxColors[item]['name'],
                 "scope": syntaxColors[item]['scope'],
                 "settings": {
-                    "foreground": syntaxFile[item]
+                    "foreground": this.syntaxColorModify(syntaxFile[item])
                 }
             });
         }
 
         // Build UI / colors
-        function lightenDarken(color: string, mod: Number): string {
-            if (mod === 0) return color;
-            let tColor = tinycolor(color);
-
-            if (mod === -1) tColor = ((tColor.isDark()) ? tColor.lighten(85) : tColor.darken(85)).greyscale();
-            else tColor = (mode === 'light') ? tColor.greyscale().darken(mod) : tColor.lighten(mod);
-            
-            return tColor.toHexString();
-        }
-
         let uiColors = {  'editor.foreground': syntaxFile['global'] };
 
         if ((!uiFile.hasOwnProperty('activityBar')) && uiFile.hasOwnProperty('backBackground')) {
@@ -84,7 +100,7 @@ export class Builder {
                 for (let scope in uiScopes[item]) {
                     let color = uiFile[item],
                         mod = uiScopes[item][scope];
-                    uiColors[scope] = lightenDarken(color, mod);
+                    uiColors[scope] = this.uiLightenDarken(color, mod, mode);
                 }
             }
         }

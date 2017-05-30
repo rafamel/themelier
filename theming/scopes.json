@@ -53,6 +53,14 @@
         }
     },
     "syntax": {
+        "string": [
+            "string",
+            "markup.inline.raw",
+            "markup.quote"
+        ],
+        "comment": [
+            "comment"
+        ],
         "variable": [
             "variable",
             "punctuation.definition.variable"
@@ -112,14 +120,6 @@
             "variable.other.constant"
         ],
         "reserved": [ "variable.language" ],
-        "comment": [
-            "comment"
-        ],
-        "string": [
-            "string",
-            "markup.inline.raw",
-            "markup.quote"
-        ],
         "htmlTag": [
             "entity.name.tag"
         ],

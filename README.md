@@ -51,6 +51,8 @@ Every time you make changes, press `ctrl(⌘) + shift + p`, type `Rebuild Themel
 
 ### Syntax Theming
 
+#### Scopes Colors
+
 These are the basic building blocks for a **syntax theme** and are defined by the `themelier.syntax` object in your `settings.json`. If any of these keys is invalid or not defined, the one defined by the *base theme* of your choice will be used.
 
 If you choose `Empty Base Theme` when selecting your *base theme*, it will be completely up to you to define each; if any is not defined, it will inherit from `global`.
@@ -87,6 +89,19 @@ This would:
 - Make `support` be `#E5C07B` (and therefore, also `class`, as it inherits from `support`, as long as your current base theme doesn't have a specific `class` color). However, `reserved` (which originally also inherited from `support`) will now be `#D19A66`.
 
 Keep in mind some *base themes* could have defined some extra scopes (which would override the default inheritance), and you can too: [here's the full list of scopes and inheritance rules](https://github.com/rafamel/themelier/tree/master/docs), should you ever need it.
+
+#### Light and Saturation
+
+**You can lighten, darken, saturate, and desaturate all syntax theme colors** through `themelier.light` and `themelier.saturation`. They both accept number values from -100 to 100.
+
+- `themelier.light`: Negative numbers will darken; positive numbers will lighten. `-100` will always be black; `100` will always be white.
+- `themelier.saturation`: Negative numbers will desaturate; positive numbers will saturate. `-100` will turn colors greyscale.
+
+This would desaturate syntax theme colors by 10 and lighten them by 2:
+```javascript
+themelier.light: 2,
+themelier.saturation: -10
+```
 
 ### UI Theming
 
