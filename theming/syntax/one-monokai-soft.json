@@ -1,0 +1,12 @@
+{
+    "global": "#b5b7ba",
+    "string": "#dec087",
+    "comment": "#696969",
+    "property": "#65afb8",
+    "function": "#9cbb86",
+    "keyword": "#d87980",
+    "storage": "#65afb8",
+    "operator": "#d87980",
+    "support": "#6eb1e7",
+    "constant": "#c384d6"
+}
