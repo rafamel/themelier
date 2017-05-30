@@ -1,16 +1,20 @@
 # Themelier
 
+![Logo](https://raw.githubusercontent.com/rafamel/themelier/master/images/icon.png)
+
 *Easy to personalize syntax and UI meta theme / theme editor for VSCode, with awesome out-of-the-box presets.* 
 
 [Themelier @ Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=rafamel.themelier)
-
-![Rundown](https://raw.githubusercontent.com/rafamel/themelier/master/images/rundown.gif)
 
 ---
 
 The goal of *Themelier* is to introduce a set of scoping rules that *makes sense* regardless of the specific colors used, allowing for **fast, no-hasle theme personalization,** either from a *base theme*, or from scratch.
 
 It standarizes the behavior of themes (as they'll only change colors, but mostly not scoping rules), **provides a way to quickly access an ample set of themes**, and **allows for any syntax theme to be used with any UI theme,** as long as they're both either dark or light.
+
+![Rundown](https://raw.githubusercontent.com/rafamel/themelier/master/images/rundown.gif)
+
+---
 
 ## Basic Usage
 
@@ -20,26 +24,7 @@ To start, press `ctrl(⌘) + k` and then `ctrl(⌘) + t` to change your current 
 
 Press `ctrl(⌘) + shift + p` and type `Choose Themelier Theme`, then hit return. **You'll be offered different syntax themes to choose from first, then you'll be given the UI theme choices.**
 
-You can currently choose from the following base themes:
-
-- Syntax
-    - Dark
-        - One Dark
-        - One Dark Soft
-        - One Dark Vivid
-        - One Monokai
-        - One Monokai Soft
-        - Pastic
-    - Light
-        - One Light
-- UI
-    - Dark
-        - Dark UI
-        - Atomic
-        - Atomic Pro
-    - Light
-        - Light UI
-        - Atomic
+You can currently choose between *One Dark*, *One Monokai*, *Plastic*, or *One Light* as your syntax base themes, among others.
 
 ## Settings
 
@@ -130,12 +115,12 @@ Discussions regarding a different inheritance structure and groupings for scopes
 
 Pull requests for new base themes for syntax and UI are also encouraged, particularly light themes, since there are not many yet.
 
-The themes live in the `theming/syntax` and `theming/ui` folders of the repo.
+The themes live in the `theming/syntax` and `theming/ui` folders of the repo. [Here's some further documentation](https://github.com/rafamel/themelier/tree/master/docs), if you need it.
 
 ## Credits
 
 * [Code Samples](https://github.com/akamud/vscode-theme-onedark)
-* [Icon Look](https://github.com/will-stone/plastic)
+* [Icon look](https://github.com/will-stone/plastic)
 * Syntax theme colors:
     * [One Dark](https://atom.io/themes/one-dark-syntax)
     * [One Dark Vivid](https://atom.io/themes/one-dark-vivid-syntax)
