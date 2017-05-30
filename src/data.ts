@@ -157,7 +157,7 @@ export class Data {
         return this._inheritance;
     }
 
-    // Writing theme files
+    // Writing theme file
     public writeTheme(name: string, theme: {}) {
         fs.writeFileSync(path.join(this.baseDir, 'dest', name + '.json'), JSON.stringify(theme, null, 2), 'utf8');
     }

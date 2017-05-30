@@ -7,7 +7,7 @@ These are all the properties you can define in the `themelier.ui` object of your
 - `foreBackground`: Main background color: Editor, Status Bar, Title Bar, and Sidebar.
     - `sidebar`: Sidebar. Inherits from `foreBackground` by default.
 - `backBackground`: Secondary background color: Peek View, Input, and Activity Bar.
-    - `activityBar`: Sidebar. Inherits from `backBackground` by default.
+    - `activityBar`: Activity Bar. Inherits from `backBackground` by default.
 - `selection`: For selected text.
 - `line`: Line number and indentation guides.
 - `border`: For a contrast border between areas.

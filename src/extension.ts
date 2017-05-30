@@ -6,8 +6,6 @@ import { Builder } from './builder';
 
 // This method is called when the extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-    // Use the console to output diagnostic information (console.log) and errors (console.error).
-    // This line of code will only be executed once when your extension is activated.
 
     let data = new Data(context),
         builder = new Builder(data),
