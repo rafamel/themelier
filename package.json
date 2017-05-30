@@ -4,7 +4,7 @@
   "description": "Easy to personalize meta theme / theme editor with awesome out-of-the-box presets",
   "version": "0.0.1",
   "publisher": "rafamel",
-  "icon": "images/icon.png",
+  "icon": "icon_256.png",
   "categories": [
     "Themes",
     "Other"

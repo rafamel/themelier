@@ -1,8 +1,8 @@
 # Themelier
 
-![Logo](https://raw.githubusercontent.com/rafamel/themelier/master/images/icon.png)
+![Logo](https://raw.githubusercontent.com/rafamel/themelier/master/docs/images/icon_128.png)
 
-*Easy to personalize syntax and UI meta theme / theme editor for VSCode, with awesome out-of-the-box presets.* 
+*Easy to personalize syntax and UI meta theme / theme editor for VSCode, with awesome out-of-the-box presets.*
 
 [Themelier @ Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=rafamel.themelier)
 
@@ -12,9 +12,7 @@ The goal of *Themelier* is to introduce a set of scoping rules that *makes sense
 
 It standarizes the behavior of themes (as they'll only change colors, but mostly not scoping rules), **provides a way to quickly access an ample set of themes**, and **allows for any syntax theme to be used with any UI theme,** as long as they're both either dark or light.
 
-![Rundown](https://raw.githubusercontent.com/rafamel/themelier/master/images/rundown.gif)
-
----
+![Rundown](https://raw.githubusercontent.com/rafamel/themelier/master/docs/images/rundown.gif)
 
 ## Basic Usage
 

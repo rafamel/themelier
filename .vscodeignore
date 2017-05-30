@@ -7,5 +7,3 @@ docs/**
 **/*.map
 .gitignore
 tsconfig.json
-images/*.xcf
-images/*.gif
