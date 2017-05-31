@@ -96,17 +96,21 @@ themelier.ui: {
 
 For the full list of properties you can define, check the [extended settings for *UI Theming*](https://github.com/rafamel/themelier/tree/master/docs/README.md).
 
-## Built-in Themes
-
-The built in syntax themes don't try to replicate the scoping rules of the original themes, as the point of *Themelier* is to introduce scoping rules that makes sense regardless of the colors used. They are adaptations of the original themes in a way that tries to make the most sense with *Themelier* scoping rules
-
 ## Contribute
 
-Discussions regarding a different inheritance structure and groupings for scopes are welcomed. The goal is to have a set of unique scoping rules that make the most logical sense, while being consistent and complete across as many languages as possible.
+**Pull requests for new *base themes* both for syntax and UI are encouraged,** particularly light themes, as there are not many yet. Themes live in the `themes/syntax` and `themes/ui` folders of the repo. [Here's some further documentation](https://github.com/rafamel/themelier/tree/master/docs/theme-building.md) on building themes for Themelier.
 
-Pull requests for new base themes for syntax and UI are also encouraged, particularly light themes, since there are not many yet.
+Discussions regarding a different inheritance structure and groupings for scopes are also welcomed. The goal is to have the set of unique scoping rules that makes the most logical sense, while being consistent and complete across as many languages as possible.
 
-The themes live in the `themes/syntax` and `themes/ui` folders of the repo. [Here's some further documentation](https://github.com/rafamel/themelier/tree/master/docs/theme-building.md) on building themes for Themelier.
+## Built-in Themes clarification
+
+The built in syntax themes don't try to replicate the scoping rules of the original themes, as the point of *Themelier* is to introduce scoping rules that makes sense regardless of the colors used. They are adaptations of the original themes in a way that tries to make the most sense with *Themelier* scoping rules.
+
+## To do
+
+- Remove current version and theme choice when uninstalling
+- Export / Publish current theme [Open as json / Open as tmTheme / Create Theme VSCode Extension]
+- Inheritance rules for UI
 
 ## Credits
 

@@ -1,8 +1,8 @@
 {
     "colors": {
-        "global": "#b2b4b8",
+        "global": "#acb2be",
         "string": "#99ba82",
-        "comment": "#656667",
+        "comment": "#5d636f",
         "property": "#d8747c",
         "function": "#69aee7",
         "keyword": "#c280d5",

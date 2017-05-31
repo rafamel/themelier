@@ -47,12 +47,27 @@ export class Controller {
         // Current theme IS Themelier
         // Save Current mode before requesting keys
         let currentMode = this.data.currentMode(),
+            savedMode = this.data.savedMode,
+            savedPick = this.data.savedPick,
             syntaxKeys = this.data.syntaxKeys(currentMode),
             uiKeys = this.data.uiKeys(currentMode);
         
         if (syntaxKeys.length === 0 || uiKeys.length === 0) {
             vscode.window.showInformationMessage('There are no ' + this.data.currentTheme + ' syntax or UI themes');
             return;
+        }
+
+        if (currentMode === savedMode && savedPick.length) { // Remember last pick as first in dropdown
+            let iSyntax = syntaxKeys.indexOf(savedPick[0]),
+                iUi = uiKeys.indexOf(savedPick[1]);
+            if (iSyntax !== -1) {
+                syntaxKeys.splice(iSyntax, 1);
+                syntaxKeys.unshift(savedPick[0]);
+            }
+            if (iUi !== -1) {
+                uiKeys.splice(iUi, 1);
+                uiKeys.unshift(savedPick[1]);
+            }
         }
 
         vscode.window.showQuickPick(syntaxKeys).then(syntaxSel => {

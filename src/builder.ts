@@ -8,7 +8,7 @@ export class Builder {
     constructor (private data: Data) {
 
     }
-
+    
     // Color Modifications
     private uiLightenDarken(color: string, mod: Number, mode: string): string {
         if (mod === 0) return color;
