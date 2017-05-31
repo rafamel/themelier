@@ -1,6 +1,6 @@
-# Advanced Themelier Settings
+# Extended Themelier Settings
 
-## Extended UI Theming
+## UI Theming
 
 These are all the properties you can define in the `themelier.ui` object of your `settings.json`:
 
@@ -13,13 +13,13 @@ These are all the properties you can define in the `themelier.ui` object of your
 - `border`: For a contrast border between areas.
 - `badge`: Activity Bar badges.
 
-## Extended Syntax Theming
+## Syntax Theming
 
-### Full List of Scopes
+### Scopes & Inheritance
 
 All third-level scopes (such as `definition` or `htmlTag`) will inherit from their parents following the **inheritance tree** below (so if a second-level scope is not defined for a theme, it will default to `global`, as well as any of its third-level children, if any).
 
-Keep in mind some *base themes* could have a different inheritance tree - however, this will only affect third-level scopes, as second-level scopes cannot be made to inherit from other scopes at the same level.
+Keep in mind some *base themes* could have a different inheritance tree - however, this will only affect third-level scopes, as second-level scopes cannot be made to inherit from other scopes (other than `global`). For more on this, check the [theme building documentation](https://github.com/rafamel/themelier/tree/master/docs/theme-building.md).
 
 These are also all the scopes you can define in the `themelier.syntax` object of your `settings.json`:
 

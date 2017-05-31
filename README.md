@@ -81,7 +81,7 @@ themelier.saturation: -10
 
 ### UI Theming
 
-You can define these in the `themelier.ui` object of your `settings.json`. You only have to define two main colors to start up:
+You can define these in the `themelier.ui` object of your `settings.json`. UI themes rely on two main colors:
 
 - `foreBackground`: Main background color: Editor, Title Bar,  Notifications, and Sidebar.
 - `backBackground`: Secondary background color: Activity Bar, Peek View, and Input.
@@ -94,7 +94,7 @@ themelier.ui: {
 }
 ```
 
-For the full list of properties you can define, check the [Extended UI Theming](https://github.com/rafamel/themelier/tree/master/docs/README.md).
+For the full list of properties you can define, check the [extended settings for *UI Theming*](https://github.com/rafamel/themelier/tree/master/docs/README.md).
 
 ## Built-in Themes
 
@@ -106,7 +106,7 @@ Discussions regarding a different inheritance structure and groupings for scopes
 
 Pull requests for new base themes for syntax and UI are also encouraged, particularly light themes, since there are not many yet.
 
-The themes live in the `theming/syntax` and `theming/ui` folders of the repo. [Here's some further documentation](https://github.com/rafamel/themelier/tree/master/docs/README.md), if you need it.
+The themes live in the `themes/syntax` and `themes/ui` folders of the repo. [Here's some further documentation](https://github.com/rafamel/themelier/tree/master/docs/theme-building.md) on building themes for Themelier.
 
 ## Credits
 

@@ -7,7 +7,7 @@ let fs = require('fs'),
 export class Data {
 
     private baseDir: string;
-    private themingDir: string;
+    private themesDir: string;
     private _scopes: {};
     private _inheritance: {};
     private _syntax: {};
@@ -16,11 +16,11 @@ export class Data {
 
     constructor(private context: vscode.ExtensionContext) {
         this.baseDir = path.join(__dirname, '../../');
-        this.themingDir = path.join(this.baseDir, 'theming');
+        this.themesDir = path.join(this.baseDir, 'themes');
     }
 
     // Read and Parse JSON
-    private readJson(file: string, base: string = this.themingDir) {
+    private readJson(file: string, base: string = this.themesDir) {
         return JSON.parse(fs.readFileSync(path.join(base, file), 'utf8'));
     }
 
