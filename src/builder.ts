@@ -10,7 +10,6 @@ export class Builder {
     }
 
     // Color Modifications
-
     private uiLightenDarken(color: string, mod: Number, mode: string): string {
         if (mod === 0) return color;
         let tColor = tinycolor(color);
@@ -36,29 +35,22 @@ export class Builder {
     }
 
     // General
-    public build(themeSyntaxUi: {'syntax': {}, 'ui': {}} = this.data.themeSyntaxUi(), mode: string = this.data.savedMode) {
+    public build(themeSyntaxUi: {'syntax': {}, 'ui': {}, 'inheritance': {}} = this.data.themeSyntaxUi(), mode: string = this.data.savedMode) {
         let name =  'Themelier ' + mode.charAt(0).toUpperCase() + mode.slice(1), // this.data.currentTheme;
-            syntaxFile = themeSyntaxUi.syntax,
-            uiFile = themeSyntaxUi.ui,
+            {syntax, ui, inheritance} = themeSyntaxUi,
             syntaxScopes = this.data.scopes['syntax'],
             uiScopes = this.data.scopes['ui'],
-            inheritance = this.data.inheritance,
             theme = {};
 
         console.log('Building ' + name);
 
         // Build Syntax / tokenColors
-        if (!syntaxFile.hasOwnProperty('global')) { // Check the theme has `global` key
-            vscode.window.showInformationMessage('There is no "global" color on the chosen Themelier theme');
-            return;
-        }
-        
         let syntaxColors = {'global': {'name': '', 'scope': []}};
         for (let theScopeKey in syntaxScopes) {
             let key = 'global';
-            if (syntaxFile.hasOwnProperty(theScopeKey)) {
+            if (syntax.hasOwnProperty(theScopeKey)) {
                 key = theScopeKey;
-            } else if (inheritance.hasOwnProperty(theScopeKey) && syntaxFile.hasOwnProperty(inheritance[theScopeKey])) {
+            } else if (inheritance.hasOwnProperty(theScopeKey) && syntax.hasOwnProperty(inheritance[theScopeKey])) {
                 key = inheritance[theScopeKey];
             }
 
@@ -73,32 +65,32 @@ export class Builder {
         else syntaxColors['global']['name'] = syntaxColors['global']['name'].slice(2);
 
         let tokenColors = [];
-        tokenColors.push({'settings': {'foreground': this.syntaxColorModify(syntaxFile['global'])}});
+        tokenColors.push({'settings': {'foreground': this.syntaxColorModify(syntax['global'])}});
         
         for (let item in syntaxColors) {
             tokenColors.push({
                 "name": syntaxColors[item]['name'],
                 "scope": syntaxColors[item]['scope'],
                 "settings": {
-                    "foreground": this.syntaxColorModify(syntaxFile[item])
+                    "foreground": this.syntaxColorModify(syntax[item])
                 }
             });
         }
 
         // Build UI / colors
-        let uiColors = {  'editor.foreground': syntaxFile['global'] };
+        let uiColors = {  'editor.foreground': syntax['global'] };
 
-        if ((!uiFile.hasOwnProperty('activityBar')) && uiFile.hasOwnProperty('backBackground')) {
-            uiFile['activityBar'] = uiFile['backBackground'];
+        if ((!ui.hasOwnProperty('activityBar')) && ui.hasOwnProperty('backBackground')) {
+            ui['activityBar'] = ui['backBackground'];
         }
-        if ((!uiFile.hasOwnProperty('sidebar')) && uiFile.hasOwnProperty('foreBackground')) {
-            uiFile['sidebar'] = uiFile['foreBackground'];
+        if ((!ui.hasOwnProperty('sidebar')) && ui.hasOwnProperty('foreBackground')) {
+            ui['sidebar'] = ui['foreBackground'];
         }
         
-        for (let item in uiFile) {
+        for (let item in ui) {
             if (uiScopes.hasOwnProperty(item)) {
                 for (let scope in uiScopes[item]) {
-                    let color = uiFile[item],
+                    let color = ui[item],
                         mod = uiScopes[item][scope];
                     uiColors[scope] = this.uiLightenDarken(color, mod, mode);
                 }

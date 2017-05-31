@@ -85,12 +85,21 @@ export class Controller {
             return;
         }
 
+        // Check both chosen Syntax and UI themes still exist
         let syntaxKeys = this.data.syntaxKeys(savedMode),
             uiKeys = this.data.uiKeys(savedMode);
         if (syntaxKeys.indexOf(savedPick[0]) === -1 || uiKeys.indexOf(savedPick[1]) === -1) {
             this.actionMsg('Your chosen Themelier theme for syntax or UI is not available', 'Change', this.choose);
+            return;
         }
-        
+
+        // Validate Theme
+        let [isValid, msg] = this.data.validThemes(savedPick, savedMode);
+        if (!isValid) {
+            this.actionMsg(msg, 'Change', this.choose);
+            return;
+        }
+
         this.builder.build();
 
         if (reload) vscode.commands.executeCommand('workbench.action.reloadWindow');

@@ -2,8 +2,8 @@
     "variable": ["definition"],
     "property": ["htmlTag", "cssProperty", "mkHeading"],
     "function": ["htmlId", "mkLinkText"],
-    "keyword": ["storage", "mkItalic"],
+    "keyword": ["mkItalic"],
     "operator": ["mkLinkUrl"],
-    "support": ["class", "reserved"],
+    "support": ["reserved"],
     "constant": ["htmlAttr", "mkBold"]
 }

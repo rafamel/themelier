@@ -1,14 +1,18 @@
 {
-    "global": "#ABB2BF",
-    "string": "#98c379",
-    "comment": "#5c6370",
-    "variable": "#D2D6db",
-    "property": "#e5c07b",
-    "function": "#d19a66",
-    "keyword": "#e06c75",
-    "operator": "#e06c75",
-    "storage": "#61afef",
-    "mkItalic": "#61afef",
-    "support": "#56b6c2",
-    "constant": "#56b6c2"
+    "colors": {
+        "global": "#ABB2BF",
+        "string": "#98C379",
+        "comment": "#5C6370",
+        "variable": "#D2D6DB",
+        "property": "#E5C07B",
+        "function": "#D19A66",
+        "keyword": "#E06C75",
+        "storage": "#61AFEF",
+        "operator": "#E06C75",
+        "support": "#56B6C2",
+        "constant": "#56B6C2"
+    },
+    "inheritance": {
+        "mkItalic": "storage"
+    }
 }

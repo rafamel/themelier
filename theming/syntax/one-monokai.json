@@ -1,12 +1,14 @@
 {
-    "global": "#ABB2BF",
-    "string": "#E5C07B",
-    "comment": "#5C6370",
-    "property": "#56B6C2",
-    "function": "#98C379",
-    "keyword": "#E06C75",
-    "storage": "#56B6C2",
-    "operator": "#E06C75",
-    "support": "#61AFEF",
-    "constant": "#c678dd"
+    "colors": {
+        "global": "#ABB2BF",
+        "string": "#E5C07B",
+        "comment": "#5C6370",
+        "property": "#56B6C2",
+        "function": "#98C379",
+        "keyword": "#E06C75",
+        "storage": "#56B6C2",
+        "operator": "#E06C75",
+        "support": "#61AFEF",
+        "constant": "#C678DD"
+    }
 }

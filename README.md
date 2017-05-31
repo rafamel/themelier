@@ -8,9 +8,9 @@
 
 ---
 
-The goal of *Themelier* is to introduce a set of scoping rules that *makes sense* regardless of the specific colors used, allowing for **fast, no-hasle theme personalization,** either from a *base theme*, or from scratch.
+The goal of *Themelier* is to introduce a set of scoping rules that *makes sense* regardless of the specific colors used, allowing for **fast, no-hasle theme personalization** with a focus on simplicity, either from a *base theme*, or from scratch.
 
-It standarizes the behavior of themes (as they'll only change colors, but mostly not scoping rules), **provides a way to quickly access an ample set of themes**, and **allows for any syntax theme to be used with any UI theme,** as long as they're both either dark or light.
+It standarizes the behavior of themes (as they'll only change colors, but mostly not scoping rules), **provides a way to quickly access, use, and personalize an ample set of themes**, and **allows for any syntax theme to be used with any UI theme,** as long as they're both either dark or light.
 
 ![Rundown](https://raw.githubusercontent.com/rafamel/themelier/master/docs/images/rundown.gif)
 
@@ -40,7 +40,7 @@ These are the basic building blocks for a **syntax theme** and are defined by th
 
 If you choose `Empty Base Theme` when selecting your *base theme*, it will be completely up to you to define each; if any is not defined, it will inherit from `global`.
 
-Here are some basic scopes and inheritance rules:
+Here's the **basic set scopes**:
 
 - `global`: The color all non-defined scopes fall back to; text.
 - `string`: Strings, also inlines and quotes in a markup language (like Markdown).
@@ -50,11 +50,9 @@ Here are some basic scopes and inheritance rules:
 - `property`: Object keys and variable properties (excluding functions).
 - `function`: Function names.
 - `keyword`: Such as `for`, `while`, and so on.
-    - `storage`: Such as `public`, `private`, `var` or `function`.
+- `storage`: Such as `public`, `private`, `var` or `function`.
 - `operator`: Such as `+`, `-`, or `=`.
 - `support`: Built-in functions, modules, types, and classes. Also primitives.
-    - `reserved`: Reserved variables such as `this`, `self`, and `super`.
-    - `class`: Non built-in types and classes.
 - `constant`: Constants.
 
 An example of `themelier.syntax` using these could be:
@@ -62,16 +60,11 @@ An example of `themelier.syntax` using these could be:
 ```javascript
 themelier.syntax: {
     "storage": "#FFF",
-    "support": "#E5C07B",
-    "reserved": "#D19A66"
+    "support": "#E5C07B"
 }
 ```
 
-This would:
-- Make `storage` (which initially inherited from `keyword`) be white, while maintaining the color defined by the current *base theme* for `keyword`.
-- Make `support` be `#E5C07B` (and therefore, also `class`, as it inherits from `support`, as long as your current base theme doesn't have a specific `class` color). However, `reserved` (which originally also inherited from `support`) will now be `#D19A66`.
-
-Keep in mind some *base themes* could have defined some extra scopes (which would override the default inheritance), and you can too: [here's the full list of scopes and inheritance rules](https://github.com/rafamel/themelier/tree/master/docs), should you ever need it.
+[Here's the full list of scopes and default inheritance rules](https://github.com/rafamel/themelier/tree/master/docs/README.md), should you ever need it.
 
 #### Light and Saturation
 
@@ -101,7 +94,7 @@ themelier.ui: {
 }
 ```
 
-For the full list of properties you can define, check the [Extended UI Theming](https://github.com/rafamel/themelier/tree/master/docs).
+For the full list of properties you can define, check the [Extended UI Theming](https://github.com/rafamel/themelier/tree/master/docs/README.md).
 
 ## Built-in Themes
 
@@ -113,7 +106,7 @@ Discussions regarding a different inheritance structure and groupings for scopes
 
 Pull requests for new base themes for syntax and UI are also encouraged, particularly light themes, since there are not many yet.
 
-The themes live in the `theming/syntax` and `theming/ui` folders of the repo. [Here's some further documentation](https://github.com/rafamel/themelier/tree/master/docs), if you need it.
+The themes live in the `theming/syntax` and `theming/ui` folders of the repo. [Here's some further documentation](https://github.com/rafamel/themelier/tree/master/docs/README.md), if you need it.
 
 ## Credits
 

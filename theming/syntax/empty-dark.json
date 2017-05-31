@@ -1,3 +1,5 @@
 {
-    "global": "#ABB2BF"
+    "colors": {
+        "global": "#ABB2BF"
+    }
 }

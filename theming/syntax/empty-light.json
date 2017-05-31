@@ -1,3 +1,5 @@
 {
-    "global": "#383a42"
+    "colors": {
+        "global": "#383a42"
+    }
 }
