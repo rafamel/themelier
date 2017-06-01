@@ -10,8 +10,9 @@ export class Controller {
     }
 
     // Interaction
-    private actionMsg = (msg: string, btn: string, fn: Function) => {
-        vscode.window.showInformationMessage(msg, { title: btn }).then(function (item) {
+    private actionMsg = (msg: string, btn: string, fn: Function, error: Boolean = true) => {
+        ((error) ? vscode.window.showErrorMessage(msg, { title: btn }) : vscode.window.showInformationMessage(msg, { title: btn }))
+        .then(function (item) {
             if (!item) return;
             fn();
         });
@@ -118,7 +119,7 @@ export class Controller {
         this.builder.build();
 
         if (reload) vscode.commands.executeCommand('workbench.action.reloadWindow');
-        else this.actionMsg('Themelier has built the theme based on your settings', 'Reload', this.reloadWindow);
+        else this.actionMsg('Themelier has built the theme based on your settings', 'Reload', this.reloadWindow, false);
     }
 
     dispose() {

@@ -112,8 +112,6 @@ The built in syntax themes don't try to replicate the scoping rules of the origi
 
 - Remove current version and theme choice when uninstalling
 - Export theme [Open as json / Open as tmTheme / Create Theme VSCode Extension]
-- showInformationMessage to [showWarningMessage/showErrorMessage](https://code.visualstudio.com/docs/extensionAPI/vscode-api) when appropriate
-- Auto rebuild theme on settings change.
 - Safety check for buttons and notifications background.
 
 ## Credits
