@@ -18,15 +18,17 @@ It standarizes the behavior of themes (as they'll only change colors, but mostly
 
 *Themelier* allows you to **quickly modify to your liking any of the base themes (both for syntax and UI)** in your `settings.json` **without having to go deep into the scopes,** by using *Themelier* default scope groupings. Check below for a list of settings. **Or you can just use *Themelier* themes out-of-the-box.**
 
-To start, press `ctrl(⌘) + k` and then `ctrl(⌘) + t` to change your current theme to `Themelier Dark` or `Themelier Light` as you would do with any other theme. Depending on which one you have selected, *Themelier* will offer you dark or white syntax and UI base themes.
+To start, press `ctrl(⌘) + k` and then `ctrl(⌘) + t` to change your current theme to `Themelier Dark` or `Themelier Light` as you would do with any other theme. Depending on which one you have selected, *Themelier* will offer you dark or light syntax and UI themes.
 
 Press `ctrl(⌘) + shift + p` and type `Choose Themelier Theme`, then hit return. **You'll be offered different syntax themes to choose from first, then you'll be given the UI theme choices.**
 
-You can currently choose between *One Dark*, *One Monokai*, *Plastic*, or *One Light* as your syntax base themes, among others.
+To change your mode from *Dark* to *Light* or vice versa, just change your theme to *Themelier Dark* or *Themelier Light* accordingly (`ctrl(⌘) + k`, then `ctrl(⌘) + t`).
+
+You can currently choose between *One Dark*, *One Monokai*, *Plastic*, and *One Light* as your syntax base themes, among others.
 
 ## Settings
 
-You can build upon the *Themelier* base themes of your choice, both for syntax and UI by using the `themelier.syntax` and `themelier.ui` objects in your `settings.json`. Whenever you define a specific color for some scope, it will overrule the one defined by the *base theme*.
+You can build upon the *Themelier* base themes of your choice, both for syntax and UI by using the `themelier.syntax` and `themelier.ui` objects in your `settings.json` - to access your settings, press `ctrl(⌘) + ,`. Whenever you define a specific color for some scope, it will overrule the one defined by the *base theme* you selected.
 
 Keep in mind **colors must be in hexadecimal format,** otherwise they'll be ignored.
 
@@ -34,7 +36,7 @@ Every time you make changes, press `ctrl(⌘) + shift + p`, type `Rebuild Themel
 
 ### Syntax Theming
 
-#### Scopes Colors
+#### Scopes
 
 These are the basic building blocks for a **syntax theme** and are defined by the `themelier.syntax` object in your `settings.json`. If any of these keys is invalid or not defined, the one defined by the *base theme* of your choice will be used.
 
@@ -83,18 +85,18 @@ themelier.saturation: -10
 
 You can define these in the `themelier.ui` object of your `settings.json`. UI themes rely on two main colors:
 
-- `foreBackground`: Main background color: Editor, Title Bar,  Notifications, and Sidebar.
-- `backBackground`: Secondary background color: Activity Bar, Peek View, and Input.
+- `mainBackground`: Main background color for the Editor. By default, it also applies to the Title Bar and Sidebar.
+- `altBackground`: Secondary background color for top tabs background (inactive tabs and free space). By default, it applies to Activity Bar, Peek View, and Input.
+
+These defaults can change depending on the theme. For more specifics and the full list of properties you can define, check [*UI Theming* at the *Extended Settings* documentation](https://github.com/rafamel/themelier/tree/master/docs/README.md).
 
 Example:
 
 ```javascript
 themelier.ui: {
-    "foreBackground": "#333",
+    "mainBackground": "#333",
 }
 ```
-
-For the full list of properties you can define, check the [extended settings for *UI Theming*](https://github.com/rafamel/themelier/tree/master/docs/README.md).
 
 ## Contribute
 
@@ -102,15 +104,17 @@ For the full list of properties you can define, check the [extended settings for
 
 Discussions regarding a different inheritance structure and groupings for scopes are also welcomed. The goal is to have the set of unique scoping rules that makes the most logical sense, while being consistent and complete across as many languages as possible.
 
-## Built-in Themes clarification
+## On Built-in Themes
 
 The built in syntax themes don't try to replicate the scoping rules of the original themes, as the point of *Themelier* is to introduce scoping rules that makes sense regardless of the colors used. They are adaptations of the original themes in a way that tries to make the most sense with *Themelier* scoping rules.
 
 ## To do
 
 - Remove current version and theme choice when uninstalling
-- Export / Publish current theme [Open as json / Open as tmTheme / Create Theme VSCode Extension]
-- Inheritance rules for UI
+- Export theme [Open as json / Open as tmTheme / Create Theme VSCode Extension]
+- showInformationMessage to [showWarningMessage/showErrorMessage](https://code.visualstudio.com/docs/extensionAPI/vscode-api) when appropriate
+- Auto rebuild theme on settings change.
+- Safety check for buttons and notifications background.
 
 ## Credits
 

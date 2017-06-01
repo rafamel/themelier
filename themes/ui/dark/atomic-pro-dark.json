@@ -1,0 +1,13 @@
+{
+    "colors": {
+        "mainBackground": "#282C34", 
+        "altBackground": "#21252B",
+        "selection": "#3F4450",
+        "line": "#4C5262",
+        "badge": "#577AC7"
+    },
+    "inheritance": {
+        "sidebar": "altBackground",
+        "activityBar": "mainBackground"
+    }
+}

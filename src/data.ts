@@ -8,10 +8,10 @@ export class Data {
 
     private baseDir: string;
     private themesDir: string;
-    private _scopes: {};
-    private _inheritance: {};
-    private _syntax: {};
-    private _ui: {};
+    private _scopes: {'syntax': {}, 'ui': {}};
+    private _inheritance: {'syntax': {}, 'ui': {}};
+    private _syntax: {'dark': {}, 'light': {}};
+    private _ui: {'dark': {}, 'light': {}};
     private _themes: {'syntax': {}, 'ui': {}};
 
     constructor(private context: vscode.ExtensionContext) {
@@ -105,7 +105,7 @@ export class Data {
         for (let i in syntaxAndUi) {
             if (!this._themes[syntaxAndUi[i]].hasOwnProperty(syntaxUiPick[i])) {
                 let syntaxOrUiObj = (syntaxAndUi[i] === 'syntax') ? this.syntax : this.ui,
-                    themePath = path.join(syntaxAndUi[i], syntaxOrUiObj[mode][syntaxUiPick[i]]);
+                    themePath = path.join(syntaxAndUi[i], mode, syntaxOrUiObj[mode][syntaxUiPick[i]]);
                 this._themes[syntaxAndUi[i]][syntaxUiPick[i]] = this.readJson(themePath);
             }
         }
@@ -115,25 +115,31 @@ export class Data {
     // Validate themes
     public validThemes(syntaxUiPick: string[], mode: string): [boolean, string] {
         let themes = this.getThemes(syntaxUiPick, mode),
-            inheritanceKeys = Object.keys(this.inheritance),
-            syntaxScopesKeys = Object.keys(this.scopes['syntax']),
-            baseMsg = 'The chosen syntax theme ';
+            syntaxAndUi = ['syntax', 'ui'];
 
-        // Colors
-        if (!themes['syntax'].hasOwnProperty('colors')) return [false, baseMsg + 'has no "colors" key'];
-        if (!themes['syntax']['colors'].hasOwnProperty('global')) return [false, baseMsg + 'has no "global" color'];
-        for (let scope in themes['syntax']['colors']) {
-            if (inheritanceKeys.indexOf(scope) !== -1) return [false, baseMsg + 'assigns a color to a third-level scope'];
-            if (scope !== 'global' && syntaxScopesKeys.indexOf(scope) === -1) return [false, baseMsg + 'assigns a color to a non existent scope'];
-        }
-        
-        // Inheritance
-        if (themes['syntax'].hasOwnProperty('inheritance')) {
-            for (let scope in themes['syntax']['inheritance']) {
-                if (inheritanceKeys.indexOf(scope) === -1) return [false, baseMsg + 'assigns inheritance to a non third-level scope'];
-                let inheritFrom = themes['syntax']['inheritance'][scope];
-                if (inheritanceKeys.indexOf(inheritFrom) !== -1) return [false, baseMsg + 'assigns inheritance from a third-level scope'];
-                if (inheritFrom !== 'global' && syntaxScopesKeys.indexOf(inheritFrom) === -1) return [false, baseMsg + 'assigns inheritance from a non existent scope'];
+        for (let syntaxOrUi of syntaxAndUi) {
+            let inheritanceKeys = Object.keys(this.inheritance[syntaxOrUi]),
+                scopeKeys = Object.keys(this.scopes[syntaxOrUi]),
+                baseMsg = 'The chosen ' + syntaxOrUi + ' theme ',
+                bottomLevel = (syntaxOrUi === 'syntax') ? 'third' : 'bottom',
+                unCheckForGlobal = (syntaxOrUi === 'syntax') ? scope => scope !== 'global' : _ => true; // Only do check for syntax
+
+            // Colors
+            if (syntaxOrUi === 'syntax' && !themes[syntaxOrUi]['colors'].hasOwnProperty('global')) return [false, baseMsg + 'has no "global" color'];
+            if (!themes[syntaxOrUi].hasOwnProperty('colors')) return [false, baseMsg + 'has no "colors" key'];
+            for (let scope in themes[syntaxOrUi]['colors']) {
+                if (inheritanceKeys.indexOf(scope) !== -1) return [false, baseMsg + 'assigns a color to a ' + bottomLevel + '-level scope'];
+                if (unCheckForGlobal(scope) && scopeKeys.indexOf(scope) === -1) return [false, baseMsg + 'assigns a color to a non existent scope'];
+            }
+            
+            // Inheritance
+            if (themes[syntaxOrUi].hasOwnProperty('inheritance')) {
+                for (let scope in themes[syntaxOrUi]['inheritance']) {
+                    if (inheritanceKeys.indexOf(scope) === -1) return [false, baseMsg + 'assigns inheritance to a non ' + bottomLevel + '-level scope'];
+                    let inheritFrom = themes[syntaxOrUi]['inheritance'][scope];
+                    if (inheritanceKeys.indexOf(inheritFrom) !== -1) return [false, baseMsg + 'assigns inheritance from a ' + bottomLevel + '-level scope'];
+                    if (unCheckForGlobal(inheritFrom) && scopeKeys.indexOf(inheritFrom) === -1) return [false, baseMsg + 'assigns inheritance from a non existent scope'];
+                }
             }
         }
 
@@ -146,7 +152,7 @@ export class Data {
         let worspaceConfig = vscode.workspace.getConfiguration('themelier'),
             config = {'syntax': {}, 'ui': {}};
 
-        for (let syntaxOrUi in config) {
+        ['syntax', 'ui'].forEach(syntaxOrUi => {
             if (worspaceConfig.hasOwnProperty(syntaxOrUi)) {
                 for (let item in worspaceConfig[syntaxOrUi]) {
                     let color = worspaceConfig[syntaxOrUi][item];
@@ -155,33 +161,35 @@ export class Data {
                     }
                 }
             }
-        }
+        });
         return config;
     }
 
     // Reading user settings w/ specific theme files
-    public themeSyntaxUi(syntaxUiPick: string[] = this.savedPick, mode: string = this.savedMode, applyUserSettings: boolean = true): {'syntax': {}, 'ui': {}, 'inheritance': {}} {
-        let {syntax, ui} = this.getThemes(syntaxUiPick, mode),
-            theming = {'syntax': syntax["colors"], 'ui': ui, 'inheritance': this.inheritance};
+    public themeSyntaxUi(syntaxUiPick: string[] = this.savedPick, mode: string = this.savedMode, applyUserSettings: boolean = true): {'syntax': {'colors': {}, 'inheritance': {}}, 'ui': { 'colors': {}, 'inheritance': {}}} {
+        let themes = this.getThemes(syntaxUiPick, mode),
+            inheritance =  JSON.parse(JSON.stringify(this.inheritance)), // Make object copy
+            theming = {'syntax': {'colors': themes['syntax']['colors'], 'inheritance': inheritance['syntax']}, 'ui': {'colors': themes['ui']['colors'], 'inheritance': inheritance['ui']}};
         
         // Inheritance
-        if (syntax.hasOwnProperty('inheritance')) {
-            theming['inheritance'] = JSON.parse(JSON.stringify(theming['inheritance'])); // Make object copy
-            for (let scope in syntax['inheritance']) {
-                theming['inheritance'][scope] = syntax['inheritance'][scope];
-            }
-        }
-
-        // Syntax and UI User Settings
-        if (applyUserSettings) {
-            let userSettings = this.userSetSyntaxUi();
-            for (let syntaxOrUi of ['syntax', 'ui']) {
-                if (userSettings.hasOwnProperty(syntaxOrUi)) {
-                    for (let item in userSettings[syntaxOrUi]) {
-                        theming[syntaxOrUi][item] = userSettings[syntaxOrUi][item];
-                    }
+        ['syntax', 'ui'].forEach(syntaxOrUi => {
+            if (themes[syntaxOrUi].hasOwnProperty('inheritance')) {
+                for (let scope in themes[syntaxOrUi]['inheritance']) {
+                    theming[syntaxOrUi]['inheritance'][scope] = themes[syntaxOrUi]['inheritance'][scope];
                 }
             }
+        });
+
+        // Syntax and UI User Settings (colors)
+        if (applyUserSettings) {
+            let userSettings = this.userSetSyntaxUi();
+            ['syntax', 'ui'].forEach(syntaxOrUi => {
+                if (userSettings.hasOwnProperty(syntaxOrUi)) {
+                    for (let item in userSettings[syntaxOrUi]) {
+                        theming[syntaxOrUi]['colors'][item] = userSettings[syntaxOrUi][item];
+                    }
+                }
+            });
         }
 
         return theming;
@@ -194,23 +202,19 @@ export class Data {
     }
 
     // Inheritance
-    public get inheritance(): Object {
+    public get inheritance(): {'syntax': {}, 'ui': {}} {
         if (!this._inheritance) {
-            let readInheritance = this.readJson('inheritance.json'),
-                inheritance = {};
-            for (let item in readInheritance) {
-                readInheritance[item].forEach(x => { inheritance[x] = item; });
+            let readInheritance = this.readJson('inheritance.json');
+            this._inheritance = {'syntax': {}, 'ui': {}};
+            for (let syntaxOrUi in readInheritance) {
+                for (let item in readInheritance[syntaxOrUi]) {
+                    readInheritance[syntaxOrUi][item].forEach(x => { this._inheritance[syntaxOrUi][x] = item; });
+                }
             }
-            this._inheritance = inheritance;
         }
 
         return this._inheritance;
     }
-
-    // public themeInheritance(): Object {
-    //     let inheritance = this.inheritance;
-
-    // }
 
     // Writing theme file
     public writeTheme(name: string, theme: {}) {

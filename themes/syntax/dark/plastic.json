@@ -13,6 +13,7 @@
         "constant": "#56B6C2"
     },
     "inheritance": {
-        "mkItalic": "storage"
+        "mkBold": "storage",
+        "mkItalic": "constant"
     }
 }

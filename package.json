@@ -73,8 +73,8 @@
           "type": "object",
           "description": "UI theme colors for Themelier",
           "default": {
-            "foreBackground": "",
-            "backBackground": ""
+            "mainBackground": "",
+            "altBackground": ""
           }
         },
         "themelier.light": {

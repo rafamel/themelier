@@ -72,10 +72,10 @@ export class Controller {
 
         vscode.window.showQuickPick(syntaxKeys).then(syntaxSel => {
             if (!syntaxSel) return;
-            vscode.window.showQuickPick(uiKeys).then(uiSel => {
+            vscode.window.showQuickPick(uiKeys.map(x => x + ' UI')).then(uiSel => {
                 if (!uiSel) return;
                 // Save Pick & Mode
-                this.data.setCurrent(currentMode, [syntaxSel, uiSel]);
+                this.data.setCurrent(currentMode, [syntaxSel, uiSel.slice(0, -3)]);
                 // Build
                 this.build();
             });

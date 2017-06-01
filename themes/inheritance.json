@@ -1,9 +1,17 @@
 {
-    "variable": ["definition"],
-    "property": ["htmlTag", "cssProperty", "mkHeading"],
-    "function": ["htmlId", "mkLinkText"],
-    "keyword": ["mkItalic"],
-    "operator": ["mkLinkUrl"],
-    "support": ["reserved"],
-    "constant": ["htmlAttr", "mkBold"]
+    "syntax": {
+        "variable": ["definition"],
+        "property": ["htmlTag", "cssProperty", "mkHeading"],
+        "function": ["htmlId", "mkLinkText"],
+        "keyword": ["mkItalic"],
+        "operator": ["mkLinkUrl"],
+        "support": ["reserved", "class"],
+        "constant": ["htmlAttr", "mkBold"]
+    },
+    "ui": {
+        "mainBackground": ["sidebar", "statusBar", "titleBar"],
+        "altBackground": ["activityBar", "notification"],
+        "badge": ["button"]
+    }
+
 }

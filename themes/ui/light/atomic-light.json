@@ -1,0 +1,14 @@
+{
+    "colors": {
+        "mainBackground": "#FAFAFA",
+        "altBackground": "#EAEAEB",
+
+        "selection": "#E5E5E6",
+        "line": "#C2C2C3",
+        "border": "#DBDBDC",
+        "badge": "#DBDBDC"
+    },
+    "inheritance": {
+        "sidebar": "altBackground"
+    }
+}
