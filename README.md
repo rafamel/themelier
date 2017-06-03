@@ -61,7 +61,7 @@ An example of `themelier.syntax` using these could be:
 
 ```javascript
 themelier.syntax: {
-    "storage": "#FFF",
+    "storage": "#B2B2B2",
     "support": "#E5C07B"
 }
 ```
@@ -108,9 +108,9 @@ Discussions regarding a different inheritance structure and groupings for scopes
 
 The built in syntax themes don't try to replicate the scoping rules of the original themes, as the point of *Themelier* is to introduce scoping rules that makes sense regardless of the colors used. They are adaptations of the original themes in a way that tries to make the most sense with *Themelier* scoping rules.
 
-## To do
+## TODO
 
-- Remove current version and theme choice when uninstalling
+- Add interfaces
 - Export theme [Open as json / Open as tmTheme / Create Theme VSCode Extension]
 - Safety check for buttons and notifications background.
 

@@ -1,11 +1,13 @@
 'use strict';
 import * as vscode from 'vscode'; // VS Code extensibility API
-import { Builder } from './builder';
+import { InputBoxOptions } from 'vscode';
 import { Data } from './data';
+import { Builder } from './builder';
+import { ThemeExport } from './export';
 
 export class Controller {
 
-    constructor(private data: Data, private builder: Builder) {
+    constructor(private data: Data, private builder: Builder, private themeExport: ThemeExport) {
 
     }
 
@@ -31,7 +33,7 @@ export class Controller {
     }
 
     private reloadWindow() { vscode.commands.executeCommand('workbench.action.reloadWindow'); }
-    private selectAndWaitToChoose = () =>  { 
+    private selectAndWaitToChoose = () =>  {
         vscode.commands.executeCommand('workbench.action.selectTheme'); this.waitToFn(this.choose);
     }
     private selectAndWaitToBuild = () => {
@@ -52,7 +54,7 @@ export class Controller {
             savedPick = this.data.savedPick,
             syntaxKeys = this.data.syntaxKeys(currentMode),
             uiKeys = this.data.uiKeys(currentMode);
-        
+
         if (syntaxKeys.length === 0 || uiKeys.length === 0) {
             vscode.window.showInformationMessage('There are no ' + this.data.currentTheme + ' syntax or UI themes');
             return;
@@ -120,6 +122,83 @@ export class Controller {
 
         if (reload) vscode.commands.executeCommand('workbench.action.reloadWindow');
         else this.actionMsg('Themelier has built the theme based on your settings', 'Reload', this.reloadWindow, false);
+    }
+
+
+    public export = () => {
+
+        // REFACTOR: To Promise style
+
+        // Options
+        let options = {
+            'Create VSCode Theme': 'extension',
+            'Export as VSCode JSON theme file': 'json',
+            'Export Syntax theme as universal tmTheme': 'tmtheme'
+        };
+        let psOption = vscode.window.showQuickPick(Object.keys(options)).then(option => {
+            if (!option) return;
+            option = options[option];
+
+            // Check empty folder
+            let psCont: Thenable<Boolean> = Promise.resolve(true);
+            if (option === 'extension') {
+                psCont = vscode.workspace.findFiles('**').then(x => { // TODO Exclude system files but not .git
+                    if (x.length) {
+                        vscode.window.showErrorMessage('Your root folder must be empty. Create a new folder and open it before retrying.');
+                        return false;
+                    } else return true;
+                });
+            }
+            psCont.then(cont => {
+                if (!cont) return;
+
+                // Only Syntax?
+                let forSyntaxAndUi = {
+                        'Both Syntax and UI': 'all',
+                        'Syntax and basic UI (background, highlight, selection, guide)': 'basic',
+                        'Only Syntax': 'syntax'
+                    },
+                    forSyntaxAndUiKeys = Object.keys(forSyntaxAndUi);
+                if (option === 'tmtheme') forSyntaxAndUiKeys.splice(0,1);
+
+                vscode.window.showQuickPick(forSyntaxAndUiKeys).then(onlySyntax => {
+                    if (!onlySyntax) return;
+                    onlySyntax = forSyntaxAndUi[onlySyntax];
+
+                    // Mode
+                    let mode = ((this.data.isCurrent()) ? this.data.currentMode() : this.data.savedMode),
+                        psMode: Thenable<string> = Promise.resolve(mode);
+                    if (!mode) {
+                        psMode = vscode.window.showQuickPick(['Dark', 'Light']).then(x => {
+                            if (!x) return;
+                            return x.toLowerCase();
+                        });
+                    }
+                    psMode.then(mode => {
+                        if (!mode) return;
+
+                        // Theme Name
+                        vscode.window.showInputBox({prompt: "Name your Theme (optional)"}).then(name => {
+                            if (!name) name = 'Themelier ' + mode.charAt(0).toUpperCase() + mode.slice(1) + ' derived';
+
+                            // Theme Author
+                            let psAuthor: Thenable<string> = Promise.resolve('Themelier');
+                            if (option !== 'json') {
+                                psAuthor = vscode.window.showInputBox({prompt: "Author / Publisher (optional)"}).then(author => {
+                                    if (!author) author = 'Themelier';
+                                    return author;
+                                });
+                            }
+                            psAuthor.then(author => {
+
+                                // Run
+                                this.themeExport.export(option, onlySyntax, mode, name, author);
+                            });
+                        })
+                    });
+                });
+            })
+        });
     }
 
     dispose() {

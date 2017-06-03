@@ -1,7 +1,7 @@
 'use strict';
 import * as vscode from 'vscode'; // VS Code extensibility API
 
-let fs = require('fs'),
+const fs = require('fs'),
     path = require('path');
 
 export class Data {
@@ -42,7 +42,7 @@ export class Data {
     public uiKeys(mode: string): string[] {
         return (this.ui.hasOwnProperty(mode)) ? Object.keys(this.ui[mode]) : [];
     }
-    
+
     // Current Theme & State
     public get currentTheme(): string {
         return vscode.workspace.getConfiguration('workbench')['colorTheme'];
@@ -131,7 +131,7 @@ export class Data {
                 if (inheritanceKeys.indexOf(scope) !== -1) return [false, baseMsg + 'assigns a color to a ' + bottomLevel + '-level scope'];
                 if (unCheckForGlobal(scope) && scopeKeys.indexOf(scope) === -1) return [false, baseMsg + 'assigns a color to a non existent scope'];
             }
-            
+
             // Inheritance
             if (themes[syntaxOrUi].hasOwnProperty('inheritance')) {
                 for (let scope in themes[syntaxOrUi]['inheritance']) {
@@ -170,7 +170,7 @@ export class Data {
         let themes = this.getThemes(syntaxUiPick, mode),
             inheritance =  JSON.parse(JSON.stringify(this.inheritance)), // Make object copy
             theming = {'syntax': {'colors': themes['syntax']['colors'], 'inheritance': inheritance['syntax']}, 'ui': {'colors': themes['ui']['colors'], 'inheritance': inheritance['ui']}};
-        
+
         // Inheritance
         ['syntax', 'ui'].forEach(syntaxOrUi => {
             if (themes[syntaxOrUi].hasOwnProperty('inheritance')) {
@@ -216,9 +216,14 @@ export class Data {
         return this._inheritance;
     }
 
-    // Writing theme file
-    public writeTheme(name: string, theme: {}) {
-        fs.writeFileSync(path.join(this.baseDir, 'dest', name + '.json'), JSON.stringify(theme, null, 2), 'utf8');
+    // Writing final theme file
+    public writeTheme(name: string, theme: {}, dir = path.join(this.baseDir, 'dest')) {
+        fs.writeFileSync(path.join(dir, name + '.json'), JSON.stringify(theme, null, 2), 'utf8');
+    }
+
+    // Get final theme file for export
+    public getTheme(file: string): Object {
+        return this.readJson(file + '.json', path.join(this.baseDir, 'dest'));
     }
 
     dispose() {

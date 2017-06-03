@@ -1,15 +1,17 @@
 'use strict';
 import * as vscode from 'vscode'; // VS Code extensibility API
 import { Data } from './data';
-import { Controller } from './controller';
 import { Builder } from './builder';
+import { ThemeExport } from './export';
+import { Controller } from './controller';
 
 // This method is called when the extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
     let data = new Data(context),
         builder = new Builder(data),
-        controller = new Controller(data, builder);
+        themeExport = new ThemeExport(data),
+        controller = new Controller(data, builder, themeExport);
 
     if (data.isFirst) { // Do first build and offer theme choice at first install
         data.setFirst(false);
@@ -35,9 +37,13 @@ export function activate(context: vscode.ExtensionContext) {
     let chooseCommand = vscode.commands.registerCommand('themelier.choose', () => {
         controller.choose();
     });
-    
+
+    let exportCommand = vscode.commands.registerCommand('themelier.export', () => {
+        controller.export();
+    });
+
     // Add to a list of disposables which are disposed when this extension is deactivated.
-    context.subscriptions.push(data, builder, controller, rebuildCommand, chooseCommand);
+    context.subscriptions.push(data, builder, controller, rebuildCommand, chooseCommand, exportCommand);
 
 }
 

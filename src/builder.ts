@@ -1,14 +1,14 @@
 'use strict';
 import * as vscode from 'vscode'; // VS Code extensibility API
 import { Data } from './data';
-let tinycolor = require("tinycolor2");
+const tinycolor = require("tinycolor2");
 
 export class Builder {
 
     constructor (private data: Data) {
 
     }
-    
+
     // Color Modifications
     private uiLightenDarken(color: string, mod: Number, mode: string): string {
         if (mod === 0) return color;
@@ -16,7 +16,7 @@ export class Builder {
 
         if (mod === -1) tColor = ((tColor.isDark()) ? tColor.lighten(85) : tColor.darken(85)).greyscale();
         else tColor = (mode === 'light') ? tColor.greyscale().darken(mod) : tColor.lighten(mod);
-        
+
         return tColor.toHexString();
     }
 
@@ -24,7 +24,7 @@ export class Builder {
         let worspaceConfig = vscode.workspace.getConfiguration('themelier'),
             light = worspaceConfig['light'],
             saturation = worspaceConfig['saturation'];
-        
+
         if (light === 0 && saturation === 0) return color;
         let tColor = tinycolor(color);
 
@@ -66,7 +66,7 @@ export class Builder {
 
         let tokenColors = [];
         tokenColors.push({'settings': {'foreground': this.syntaxColorModify(syntax['colors']['global'])}});
-        
+
         for (let item in syntaxColors) {
             tokenColors.push({
                 "name": syntaxColors[item]['name'],
@@ -86,7 +86,7 @@ export class Builder {
                 uiColors[property] = uiColors[ui['inheritance'][property]];
             }
         }
-        
+
         for (let item in uiColors) {
             if (uiScopes.hasOwnProperty(item)) {
                 for (let scope in uiScopes[item]) {
@@ -96,7 +96,7 @@ export class Builder {
                 }
             }
         }
-        
+
         // Put the theme together
         theme['name'] = name;
         theme['include'] = './common.json';
@@ -128,7 +128,7 @@ export class Builder {
                     if (syntaxKeys.indexOf(savedPick[0]) !== -1) syntaxPick = savedPick[0];
                     if (uiKeys.indexOf(savedPick[1]) !== -1) uiPick = savedPick[1];
                 }
-                
+
                 let themeSyntaxUi = this.data.themeSyntaxUi([syntaxPick, uiPick], mode, applyUserSettings);
                 this.build(themeSyntaxUi, mode);
             }
