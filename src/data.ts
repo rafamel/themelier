@@ -1,6 +1,8 @@
 'use strict';
 import * as vscode from 'vscode'; // VS Code extensibility API
 
+// REFACTOR: Sync fs to async and useful error msgs. fs to fs-extra?
+
 const fs = require('fs'),
     path = require('path');
 
@@ -217,7 +219,7 @@ export class Data {
     }
 
     // Writing final theme file
-    public writeTheme(name: string, theme: {}, dir = path.join(this.baseDir, 'dest')) {
+    public writeTheme(name: string, theme: {}, dir = path.join(this.baseDir, 'dest')) { // TODO async
         fs.writeFileSync(path.join(dir, name + '.json'), JSON.stringify(theme, null, 2), 'utf8');
     }
 

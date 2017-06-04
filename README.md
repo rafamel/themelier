@@ -113,6 +113,7 @@ The built in syntax themes don't try to replicate the scoping rules of the origi
 - Add interfaces
 - Export theme [Open as json / Open as tmTheme / Create Theme VSCode Extension]
 - Safety check for buttons and notifications background.
+- Write documentation on export
 
 ## Credits
 

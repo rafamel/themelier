@@ -142,7 +142,7 @@ export class Controller {
             // Check empty folder
             let psCont: Thenable<Boolean> = Promise.resolve(true);
             if (option === 'extension') {
-                psCont = vscode.workspace.findFiles('**').then(x => { // TODO Exclude system files but not .git
+                psCont = vscode.workspace.findFiles('**').then(x => { // TODO: Exclude system files but not .git
                     if (x.length) {
                         vscode.window.showErrorMessage('Your root folder must be empty. Create a new folder and open it before retrying.');
                         return false;

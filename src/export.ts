@@ -7,7 +7,8 @@ const merge = require('deepmerge'),
     plist = require('plist-json'),
     spawn = require('spawn-command'),
     fs = require('fs-extra'),
-    path = require('path');
+    path = require('path'),
+    fetch = require('node-fetch');
 
 
 export class ThemeExport {
@@ -21,9 +22,7 @@ export class ThemeExport {
         vscode.workspace.openTextDocument({content: content, language: language})
         .then((doc) => {
             vscode.window.showTextDocument(doc);
-        }, (reason) => {
-                console.log(reason);
-        });
+        }, (reason) => { console.log(reason); });
     }
 
     private sortJsonKeys(themeObject) {
@@ -32,10 +31,6 @@ export class ThemeExport {
             if (!themeObject[item]) delete themeObject[item];
         }
         return themeObject;
-    }
-
-    public writeJson(path:string, obj: Object) {
-        fs.writeFileSync(path, JSON.stringify(obj, null, 2), 'utf8');
     }
 
     // Build tmTheme
@@ -59,152 +54,249 @@ export class ThemeExport {
     }
 
     // Build VSCode theme extension
-    private run(cmd:string, reason: string = '', path = cwd) {
-        return new Promise((accept, reject) => {
-            let opts : any = {};
-            if (vscode.workspace) opts.cwd = path;
-            process = spawn(cmd, opts);
-            process.on('close', (status) => {
-                if (status) reject(reason + `Status code ${status}.`);
-                else accept();
-                process = null;
-            });
-        });
-    }
-    private extension(content, mode, name, author, description = name) { // CHC description=name
+    private extension(content, mode, name, author, description = name) { // FIXME description=name
+
+        // TODO: Show progress
 
         let cwd = vscode.workspace.rootPath,
             generatorPath = path.join(cwd, 'vscode-generator-code'),
-            identifier = 'th-' + name.toLowerCase().replace(/[^a-z0-9]/g, '-'),
+            identifier = name.toLowerCase().replace(/[^a-z0-9]/g, '-'),
             process = null;
 
-        this.run(
+        function run(cmd:string, reason: string = '', path = cwd) {
+            return new Promise((accept, reject) => {
+                let opts : any = {};
+                if (vscode.workspace) opts.cwd = path;
+                process = spawn(cmd, opts);
+                process.on('close', (status) => {
+                    if (status) reject(reason + ` Status code ${status}.`);
+                    else accept();
+                    process = null;
+                });
+            });
+        }
+        const fsError = (err: Object, type: String, file: String) => {
+            return type + ` error (${file}). ` + String(err).replace('Error:','');
+        }
+
+        run(
             // Check Git
             'git --help',
-            'Git doesn\'t seem to be installed: '
+            'Git doesn\'t seem to be installed.'
         )
         .then(() => {
             // Check npm
-            return this.run(
+            return run(
                 'npm help',
-                'npm doesn\'t seem to be installed: '
+                'npm doesn\'t seem to be installed.'
             );
         })
         .then(() => {
             // Check Yeoman
-            return this.run(
+            return run(
                 'yo --help',
-                'Yeoman doesn\'t seem to be installed (http://yeoman.io/): '
+                'Yeoman doesn\'t seem to be installed (http://yeoman.io/).'
             );
         })
         .then(() => {
             // Clone generator
             vscode.window.showInformationMessage('Building the theme. Please wait, it\'ll take a while');
-            return this.run(
+            console.log('Running git');
+            return run(
                 'git clone https://github.com/Microsoft/vscode-generator-code.git',
-                '\'git clone\' error: '
+                '\'git clone\' error.'
             );
         })
         .then(() => {
-            // Modify generator package.json
-            return new Promise((accept, reject) => {
-                try {
-                    let jsonPath = path.join(generatorPath, 'package.json'),
-                        packageObj = fs.readJsonSync(jsonPath);
-                    packageObj['name'] = 'generator-themelier';
-                    delete packageObj['scripts']['test'];
-                    fs.writeJsonSync(jsonPath, packageObj);
-                    accept();
-                } catch (err) { reject('Error: ' + err); }
-            });
-        })
-        .then(() => {
-            // Modify generator index.js
-            return new Promise((accept, reject) => {
-                try {
-                    let indexPath = path.join(generatorPath, 'generators/app/index.js'),
-                        index = fs.readFileSync(indexPath, 'utf8'),
-                        replaceFrom = index.match(/constructor(.*)/)[0],
-                        replaceTo = replaceFrom + ` this.prompt = function(obj) { let ans = {};
-                        ans[obj['name']] = dict[obj['name']]; return Promise.resolve(ans); }`,
-                        dict = {
-                            'type': 'ext-colortheme',
-                            'themeImportType': 'new',
-                            'displayName': name,
-                            'name': identifier,
-                            'description': name, // TODO Description
-                            'publisher': author,
-                            'themeName': name,
-                            'themeBase': (mode === 'light') ? 'vs' : 'vs-dark'
-                        },
-                        strDict = 'const dict = ' + JSON.stringify(dict) + ';';
-                    index = index.replace('var ', strDict + ' var ').replace(replaceFrom, replaceTo);
-                    fs.writeFileSync(indexPath, index, 'utf8');
-                    accept();
-                } catch (err) { reject('Error: ' + err); }
-            });
-        })
-        .then(() => {
-            // npm link
-            console.log('Running npm link');
-            return this.run(
-                'npm link',
-                '\'npm link\' failed: ',
-                generatorPath
-            );
-        })
-        .then(() => {
-            // npm link
-            console.log('Runnin yo');
-            return this.run(
-                'yo themelier',
-                '\'yo\' failed: ',
-                generatorPath
-            );
-        })
-        .then(() => {
-            // npm link
-            console.log('Running npm unlink');
-            return this.run(
-                'npm unlink',
-                '\'npm unlink\' failed. Traces of themelier building remain on your system. ',
-                generatorPath
-            );
-        })
-        .then(() => {
-            // Relocate theme and remove generator dir
-            return new Promise((accept, reject) => {
-                try {
-                    fs.copySync(path.join(generatorPath, identifier), cwd);
-                    fs.removeSync(generatorPath);
-                    fs.removeSync(path.join(cwd, 'vsc-extension-quickstart.md'));
-                    accept();
-                } catch (err) { reject('Error: ' + err); }
-            });
-        })
-        .then(() => {
-            // Relocate theme and remove generator dir
-            return new Promise((accept, reject) => {
-                try {
-                    let packagePath = path.join(cwd, 'package.json'), // TODO Add license
-                        packageObj = fs.readJsonSync(packagePath),
-                        themePath = path.join(cwd, packageObj['contributes']['themes'][0]['path']);
-                    // Write theme file
-                    fs.writeFileSync(themePath, content);
-                    // TODO Write package.json if (mode === dark) pg["galleryBanner"] = { "theme": "dark" };
+            // Read generator package.json
+            let jsonName = 'package.json',
+                jsonPath = path.join(generatorPath, jsonName);
+            console.log(`Reading generator ${jsonName}`);
 
-                    // Write README.md TODO: Add colors & descriptions
-                    let readme = `# ${name}\n\n${description}\n\n---\n
-                    An awesome theme built with [Themelier](https://github.com/rafamel/themelier)`;
-                    fs.writeFileSync(path.join(cwd, 'README.md'), content, 'utf8');
-                    accept();
-                } catch (err) { reject('Error: ' + err); }
+            return new Promise((accept, reject) => {
+                fs.readJson(jsonPath)
+                    .then((packageObj) => accept([packageObj, jsonPath, jsonName]))
+                    .catch((err) => reject(fsError(err, 'Read', jsonName)));
+            });
+        })
+        .then(([packageObj, jsonPath, jsonName]) => {
+            // Modify generator package.json
+            console.log(`Writing generator ${jsonName}`);
+
+            packageObj['name'] = 'generator-themelier';
+            delete packageObj['scripts']['test'];
+            return new Promise((accept, reject) => {
+                fs.writeJson(jsonPath, packageObj).then((index) => accept())
+                    .catch((err) => reject(fsError(err, 'Write', jsonName)));
             });
         })
         .then(() => {
-            vscode.window.showInformationMessage('Theme built! Press \'F5\' to test it!');
+            // Read generator index.js
+            let indexName = 'index.js',
+                indexPath = path.join(generatorPath, 'generators/app/' + indexName);
+            console.log(`Reading generator ${indexName}`);
+
+            return new Promise((accept, reject) => {
+                fs.readFile(indexPath, 'utf8')
+                    .then((index) => accept([index, indexPath, indexName]))
+                    .catch((err) => reject(fsError(err, 'Read', indexName)));
+            });
         })
-        .catch((reason) => { vscode.window.showErrorMessage(reason); });
+        .then(([index, indexPath, indexName]) => {
+            // Modify generator index.js
+            console.log(`Writing generator ${indexName}`);
+            return new Promise((accept, reject) => {
+                let replaceFrom = index.match(/constructor(.*){/)[0];
+                if (!replaceFrom) reject('Error: Couldn\'t find generator constructor.')
+                let replaceTo = replaceFrom
+                        + "this.prompt=(o)=>{let a={};a[o['name']]=dict[o['name']];return Promise.resolve(a);}",
+                    dict = {
+                        'type': 'ext-colortheme',
+                        'themeImportType': 'new',
+                        'displayName': name,
+                        'name': identifier,
+                        'description': name, // TODO Description
+                        'publisher': author,
+                        'themeName': name,
+                        'themeBase': (mode === 'light') ? 'vs' : 'vs-dark'
+                    },
+                    strDict = 'const dict = ' + JSON.stringify(dict) + ';';
+                index = index.replace('var ', strDict + ' var ').replace(replaceFrom, replaceTo);
+
+                fs.writeFile(indexPath, index, 'utf8').then(() => accept())
+                    .catch((err) => reject(fsError(err, 'Write', indexName)));
+            });
+        })
+        .then(() => {
+            // npm link
+            // TODO: running without npm linking?
+            console.log('Running npm link');
+            return run(
+                'npm link',
+                '\'npm link\' failed.',
+                generatorPath
+            );
+        })
+        .then(() => {
+            // yo
+            console.log('Runnin yo');
+            return run(
+                'yo themelier',
+                'Yeoman (\'yo\') failed.'
+            );
+        })
+        .then(() => {
+            // npm unlink
+            console.log('Running npm unlink');
+            return run(
+                'npm unlink',
+                '\'npm unlink\' failed. Traces of themelier building remain on your system.',
+                generatorPath
+            );
+        })
+        .then(() => {
+            // Relocate theme
+            console.log('Relocating theme');
+            let tempPath = path.join(cwd, identifier);
+            return new Promise((accept, reject) => {
+                fs.copy(tempPath, cwd)
+                    .then(() => accept(tempPath))
+                    .catch((err) => reject(fsError(err, 'Copy', identifier)));
+            });
+        })
+        .then((tempPath) => {
+            // Remove generator dir
+            console.log('Removing generator dir');
+            let a = fs.remove(generatorPath),
+                b = fs.remove(tempPath),
+                c = fs.remove(path.join(cwd, 'vsc-extension-quickstart.md'));
+            return new Promise((accept, reject) => {
+                Promise.all([a,b,c]).then(() => accept())
+                    .catch((err) => reject(fsError(err, 'Delete', identifier)));
+            });
+        })
+        .then(() => {
+            // Read theme package.json
+            let packageName = 'package.json',
+                packagePath = path.join(cwd, packageName);
+            console.log(`Reading theme ${packageName}`);
+
+            return new Promise((accept, reject) => {
+                fs.readJson(packagePath)
+                    .then((packageObj) => accept([packageObj, packagePath, packageName]))
+                    .catch((err) => reject(fsError(err, 'Read', packageName)));
+            });
+        })
+        .then(([packageObj, packagePath, packageName]) => {
+            // Write theme package.json
+            console.log(`Writing theme ${packageName}`);
+
+            packageObj['author'] = { 'name': author };
+            packageObj['license'] = 'SEE LICENSE IN LICENSE';
+            if (mode === 'dark') packageObj["galleryBanner"] = { "theme": "dark" };
+
+            return new Promise((accept, reject) => {
+                fs.writeFile(packagePath, JSON.stringify(packageObj, null, 2), 'utf8')
+                    .then(() => accept(packageObj))
+                    .catch((err) => reject(fsError(err, 'Write', packageName)));
+            });
+        })
+        .then((packageObj) => {
+            // Write theme file
+            console.log('Writing theme file');
+            let themePath = path.join(cwd, packageObj['contributes']['themes'][0]['path']),
+                themeFileName = themePath.split('/').slice(-1);
+
+            return new Promise((accept, reject) => {
+                fs.writeFile(themePath, content, 'utf8').then(() => accept())
+                    .catch((err) => reject(fsError(err, 'Write', themeFileName)));
+            });
+        })
+        .then(() => {
+            // Write theme README.md
+            let readmeName = 'README.md',
+            readmePath = path.join(cwd, readmeName);
+            console.log(`Writing theme ${readmeName}`);
+
+            // TODO: Add colors & descriptions
+            let readme = `# ${name}\n\n${description}\n\n---\nAn awesome theme built with [Themelier](https://github.com/rafamel/themelier)`;
+
+            return new Promise((accept, reject) => {
+                fs.writeFile(readmePath, readme, 'utf8').then(() => accept())
+                    .catch((err) => reject(fsError(err, 'Write', readmeName)));
+            });
+        })
+        .then(() => {
+            // Fetch MIT license
+            let licenseName = 'LICENSE';
+            console.log(`Fetching ${licenseName}`);
+            return new Promise((accept, reject) => {
+                fetch('https://raw.githubusercontent.com/github/choosealicense.com/gh-pages/_licenses/mit.txt')
+                .then(res => res.text())
+                .then((license) => {
+                    license = license.split('---')[2];
+                    if (license.indexOf('MIT License') !== -1) accept([license, licenseName]);
+                    else reject(fsError('', 'Fetch', licenseName));
+                })
+                .catch((err) => reject(fsError(err, 'Fetch', licenseName)));
+            });
+        })
+        .then(([license, licenseName]) => {
+            // Write license
+            console.log(`Writing ${licenseName}`);
+            license = license
+                .replace('[year]', String(new Date().getFullYear()))
+                .replace('[fullname]', author);
+            return new Promise((accept, reject) => {
+                fs.writeFile(path.join(cwd, licenseName), license, 'utf8').then(() => accept())
+                    .catch((err) => reject(fsError(err, 'Write', licenseName)));
+            });
+        })
+        .then(() => {
+            console.log('Themelier Theme Built!')
+            vscode.window.showInformationMessage('Themelier Theme Built! Press \'F5\' to test it!');
+        })
+        .catch((reason) => vscode.window.showErrorMessage(reason));
 
     }
 
