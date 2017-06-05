@@ -2,7 +2,7 @@
 
 ![Logo](https://raw.githubusercontent.com/rafamel/themelier/master/docs/images/icon_128.png)
 
-*Easy to personalize syntax and UI meta theme / theme editor for VSCode, with awesome out-of-the-box presets.*
+*Easy to personalize syntax and UI meta theme / theme editor / maker for VSCode, with awesome out-of-the-box presets.*
 
 [Themelier @ Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=rafamel.themelier)
 
@@ -11,6 +11,8 @@
 The goal of *Themelier* is to introduce a set of scoping rules that *makes sense* regardless of the specific colors used, allowing for **fast, no-hasle theme personalization** with a focus on simplicity, either from a *base theme*, or from scratch.
 
 It standarizes the behavior of themes (as they'll only change colors, but mostly not scoping rules), **provides a way to quickly access, use, and personalize an ample set of themes**, and **allows for any syntax theme to be used with any UI theme,** as long as they're both either dark or light.
+
+No only that, you can also export your personalized themes as a `tmTheme` file or as a *VSCode* theme extension for distribution!
 
 ![Rundown](https://raw.githubusercontent.com/rafamel/themelier/master/docs/images/rundown.gif)
 
@@ -98,6 +100,10 @@ themelier.ui: {
 }
 ```
 
+## Export
+
+Themelier can export your themes for distribution as a a `tmTheme` file or as a *VSCode* extension. [Check out how](https://github.com/rafamel/themelier/tree/master/docs/export.md).
+
 ## Contribute
 
 **Pull requests for new *base themes* both for syntax and UI are encouraged,** particularly light themes, as there are not many yet. Themes live in the `themes/syntax` and `themes/ui` folders of the repo. [Here's some further documentation](https://github.com/rafamel/themelier/tree/master/docs/theme-building.md) on building themes for Themelier.
@@ -111,9 +117,8 @@ The built in syntax themes don't try to replicate the scoping rules of the origi
 ## TODO
 
 - Add interfaces
-- Export theme [Open as json / Open as tmTheme / Create Theme VSCode Extension]
 - Safety check for buttons and notifications background.
-- Write documentation on export
+- Write documentation on UI themes
 
 ## Credits
 

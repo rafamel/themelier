@@ -17,7 +17,9 @@ export function activate(context: vscode.ExtensionContext) {
         data.setFirst(false);
         data.setVer();
         builder.fullBuild();
-        vscode.window.showInformationMessage('Themelier is active', { title: 'Choose a theme' }).then(function (item) {
+        vscode.window.showInformationMessage(
+            'Themelier is active', { title: 'Choose a theme' }
+        ).then(function (item) {
             if (!item) return;
             controller.choose();
         });
@@ -30,20 +32,20 @@ export function activate(context: vscode.ExtensionContext) {
     }
 
     // Register Commands
-    let rebuildCommand = vscode.commands.registerCommand('themelier.rebuild', () => {
+    let rebuildCm = vscode.commands.registerCommand('themelier.rebuild', () => {
         controller.build();
     });
 
-    let chooseCommand = vscode.commands.registerCommand('themelier.choose', () => {
+    let chooseCm = vscode.commands.registerCommand('themelier.choose', () => {
         controller.choose();
     });
 
-    let exportCommand = vscode.commands.registerCommand('themelier.export', () => {
+    let exportCm = vscode.commands.registerCommand('themelier.export', () => {
         controller.export();
     });
 
     // Add to a list of disposables which are disposed when this extension is deactivated.
-    context.subscriptions.push(data, builder, controller, rebuildCommand, chooseCommand, exportCommand);
+    context.subscriptions.push(data, builder, themeExport, controller, rebuildCm, chooseCm, exportCm);
 
 }
 

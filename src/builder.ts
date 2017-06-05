@@ -14,8 +14,13 @@ export class Builder {
         if (mod === 0) return color;
         let tColor = tinycolor(color);
 
-        if (mod === -1) tColor = ((tColor.isDark()) ? tColor.lighten(85) : tColor.darken(85)).greyscale();
-        else tColor = (mode === 'light') ? tColor.greyscale().darken(mod) : tColor.lighten(mod);
+        if (mod === -1) {
+            tColor = (
+                (tColor.isDark()) ? tColor.lighten(85) : tColor.darken(85)
+            ).greyscale();
+        }
+        else tColor = ((mode === 'light') ?
+                        tColor.greyscale().darken(mod) : tColor.lighten(mod));
 
         return tColor.toHexString();
     }
@@ -28,44 +33,73 @@ export class Builder {
         if (light === 0 && saturation === 0) return color;
         let tColor = tinycolor(color);
 
-        if (light !== 0) tColor = (light > 0) ? tColor.lighten(light) : tColor.darken(Math.abs(light));
-        if (saturation !== 0) tColor = (saturation > 0) ? tColor.saturate(saturation) : tColor.desaturate(Math.abs(saturation));
+        if (light !== 0) {
+            tColor = (light > 0) ?
+                tColor.lighten(light) :
+                tColor.darken(Math.abs(light));
+        }
+        if (saturation !== 0) {
+            tColor = (saturation > 0) ?
+                tColor.saturate(saturation) :
+                tColor.desaturate(Math.abs(saturation));
+        }
 
         return tColor.toHexString();
     }
 
+    // Copy Editor theming to tokenColors
+    private addUiToTokenColors(uiColors, equivalences, globalColor): Object {
+        let globalForTC = { 'foreground': globalColor };
+        for (let i = 0; i < equivalences.length; i++) {
+            let [inUi, inTokens] = equivalences[i];
+            if (uiColors.hasOwnProperty(inUi)) {
+                globalForTC[inTokens] = uiColors[inUi];
+            }
+        }
+        return globalForTC;
+    }
+
     // General
-    public build(themeSyntaxUi: {'syntax': {'colors': {}, 'inheritance': {}}, 'ui': { 'colors': {}, 'inheritance': {}}} = this.data.themeSyntaxUi(), mode: string = this.data.savedMode) {
-        let name =  'Themelier ' + mode.charAt(0).toUpperCase() + mode.slice(1), // this.data.currentTheme;
+    public build(
+        themeSyntaxUi: {
+            'syntax': {'colors': {}, 'inheritance': {}},
+            'ui': { 'colors': {}, 'inheritance': {}}
+        } = this.data.themeSyntaxUi(),
+        mode: string = this.data.savedMode
+    ): Promise<any> {
+
+        let name = 'Themelier ' + this.data.modeName(mode),
             {syntax, ui} = themeSyntaxUi,
             syntaxScopes = this.data.scopes['syntax'],
             uiScopes = this.data.scopes['ui'],
-            theme = {};
+            theme = { };
 
         console.log('Building ' + name);
 
         // Build Syntax / tokenColors
         let syntaxColors = {'global': {'name': '', 'scope': []}};
-        for (let theScopeKey in syntaxScopes) {
+        for (let scopeKey in syntaxScopes) {
             let key = 'global';
-            if (syntax['colors'].hasOwnProperty(theScopeKey)) {
-                key = theScopeKey;
-            } else if (syntax['inheritance'].hasOwnProperty(theScopeKey) && syntax['colors'].hasOwnProperty(syntax['inheritance'][theScopeKey])) {
-                key = syntax['inheritance'][theScopeKey];
+            if (syntax['colors'].hasOwnProperty(scopeKey)) {
+                key = scopeKey;
+            } else if (
+                syntax['inheritance'].hasOwnProperty(scopeKey) &&
+                syntax['colors'].hasOwnProperty(syntax['inheritance'][scopeKey])
+            ) {
+                key = syntax['inheritance'][scopeKey];
             }
 
             if (syntaxColors.hasOwnProperty(key)) {
-                syntaxColors[key]['name'] += ', ' + theScopeKey;
-                syntaxColors[key]['scope'] = syntaxColors[key]['scope'].concat(syntaxScopes[theScopeKey]);
+                syntaxColors[key]['name'] += ', ' + scopeKey;
+                syntaxColors[key]['scope'] = syntaxColors[key]['scope'].concat(syntaxScopes[scopeKey]);
             } else {
-                syntaxColors[key] = {'name': theScopeKey, 'scope': syntaxScopes[theScopeKey]};
+                syntaxColors[key] = {'name': scopeKey, 'scope': syntaxScopes[scopeKey]};
             }
         }
         if (!syntaxColors['global']['scope'].length) delete syntaxColors['global']
         else syntaxColors['global']['name'] = syntaxColors['global']['name'].slice(2);
 
         let tokenColors = [];
-        tokenColors.push({'settings': {'foreground': this.syntaxColorModify(syntax['colors']['global'])}});
 
         for (let item in syntaxColors) {
             tokenColors.push({
@@ -78,8 +112,11 @@ export class Builder {
         }
 
         // Build UI / colors
-        let themeUiColors = { 'editor.foreground': this.syntaxColorModify(syntax['global']) },
-            uiColors = JSON.parse(JSON.stringify(ui['colors'])); // Clone object before manipulating
+        let themeUiColors = {
+                'editor.foreground': this.syntaxColorModify(syntax['global'])
+            },
+            // Clone object before manipulation
+            uiColors = JSON.parse(JSON.stringify(ui['colors']));
 
         for (let property in ui['inheritance']) {
             if (uiColors.hasOwnProperty(ui['inheritance'][property])) {
@@ -97,14 +134,30 @@ export class Builder {
             }
         }
 
+        // Finalize tokenColors
+        let equivalences = [
+                ['editor.background', 'background'],
+                ['editor.lineHighlightBackground', 'lineHighlight'],
+                ['editor.selectionBackground', 'selection'],
+                ['editor.findMatchHighlightBackground', 'findHighlight'],
+                ['editorIndentGuide.background', 'guide']
+            ],
+            globalForTC = this.addUiToTokenColors(themeUiColors, equivalences,
+                                this.syntaxColorModify(syntax['colors']['global']));
+
+        tokenColors.unshift({'settings': globalForTC});
+
         // Put the theme together
         theme['name'] = name;
         theme['include'] = './common.json';
         theme['colors'] = themeUiColors;
         theme['tokenColors'] = tokenColors;
 
-        this.data.writeTheme(mode, theme);
-
+        return new Promise((accept, reject) => {
+            this.data.writeTheme(mode, theme)
+            .then(() => accept())
+            .catch((err) => reject(err))
+        });
     }
 
 
@@ -116,7 +169,8 @@ export class Builder {
                 uiKeys = this.data.uiKeys(mode);
 
             if (syntaxKeys.length && uiKeys.length) {
-                // Choose first syntax and UI for each mode (dark/light) and discard user settings
+                // Choose first syntax and UI for each mode (dark/light)
+                // and discard user settings
                 let syntaxPick = syntaxKeys[0],
                     uiPick = uiKeys[0],
                     applyUserSettings = false;
@@ -129,7 +183,9 @@ export class Builder {
                     if (uiKeys.indexOf(savedPick[1]) !== -1) uiPick = savedPick[1];
                 }
 
-                let themeSyntaxUi = this.data.themeSyntaxUi([syntaxPick, uiPick], mode, applyUserSettings);
+                let themeSyntaxUi = this.data.themeSyntaxUi(
+                        [syntaxPick, uiPick], mode, applyUserSettings
+                    );
                 this.build(themeSyntaxUi, mode);
             }
         });

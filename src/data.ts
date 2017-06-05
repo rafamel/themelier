@@ -1,9 +1,7 @@
 'use strict';
 import * as vscode from 'vscode'; // VS Code extensibility API
 
-// REFACTOR: Sync fs to async and useful error msgs. fs to fs-extra?
-
-const fs = require('fs'),
+const fs = require('fs-extra'),
     path = require('path');
 
 export class Data {
@@ -19,6 +17,19 @@ export class Data {
     constructor(private context: vscode.ExtensionContext) {
         this.baseDir = path.join(__dirname, '../../');
         this.themesDir = path.join(this.baseDir, 'themes');
+    }
+
+    // FSError
+    public fsError(err: Object, type: String, file: String): String {
+        return type + ` error (${file}). ` + String(err).replace('Error:','');
+    }
+
+    // Empty directory? - Excludes system and git files
+    public emptyDir(dir = vscode.workspace.rootPath): Boolean {
+        let files = fs.readdirSync(dir),
+            ignore = ['.DS_Store', '.DS_Store?', '.Trashes', '.gitignore', '.git',
+                        'ehthumbs.db', 'Thumbs.db'];
+        return files.filter(x => ignore.indexOf(x) === -1).length === 0;
     }
 
     // Read and Parse JSON
@@ -53,6 +64,10 @@ export class Data {
     public isCurrent(): boolean {
         let currentTheme = this.currentTheme;
         return (currentTheme === 'Themelier Dark' || currentTheme === 'Themelier Light');
+    }
+
+    public modeName(mode = this.savedMode) {
+        return mode.charAt(0).toUpperCase() + mode.slice(1);
     }
 
     public currentMode(): string {
@@ -107,11 +122,13 @@ export class Data {
         for (let i in syntaxAndUi) {
             if (!this._themes[syntaxAndUi[i]].hasOwnProperty(syntaxUiPick[i])) {
                 let syntaxOrUiObj = (syntaxAndUi[i] === 'syntax') ? this.syntax : this.ui,
-                    themePath = path.join(syntaxAndUi[i], mode, syntaxOrUiObj[mode][syntaxUiPick[i]]);
+                    themePath = path.join(syntaxAndUi[i], mode,
+                                            syntaxOrUiObj[mode][syntaxUiPick[i]]);
                 this._themes[syntaxAndUi[i]][syntaxUiPick[i]] = this.readJson(themePath);
             }
         }
-        return {'syntax': this._themes['syntax'][syntaxUiPick[0]], 'ui': this._themes['ui'][syntaxUiPick[1]]};
+        return {'syntax': this._themes['syntax'][syntaxUiPick[0]],
+                    'ui': this._themes['ui'][syntaxUiPick[1]]};
     }
 
     // Validate themes
@@ -124,23 +141,41 @@ export class Data {
                 scopeKeys = Object.keys(this.scopes[syntaxOrUi]),
                 baseMsg = 'The chosen ' + syntaxOrUi + ' theme ',
                 bottomLevel = (syntaxOrUi === 'syntax') ? 'third' : 'bottom',
-                unCheckForGlobal = (syntaxOrUi === 'syntax') ? scope => scope !== 'global' : _ => true; // Only do check for syntax
+                unCheckForGlobal = (syntaxOrUi === 'syntax') ? // Only check for syntax
+                                        scope => scope !== 'global' : _ => true;
 
             // Colors
-            if (syntaxOrUi === 'syntax' && !themes[syntaxOrUi]['colors'].hasOwnProperty('global')) return [false, baseMsg + 'has no "global" color'];
-            if (!themes[syntaxOrUi].hasOwnProperty('colors')) return [false, baseMsg + 'has no "colors" key'];
+            if (syntaxOrUi === 'syntax' && !themes[syntaxOrUi]['colors'].hasOwnProperty('global')) {
+                return [false, baseMsg + 'has no "global" color'];
+            }
+            if (!themes[syntaxOrUi].hasOwnProperty('colors')) {
+                return [false, baseMsg + 'has no "colors" key'];
+            }
             for (let scope in themes[syntaxOrUi]['colors']) {
-                if (inheritanceKeys.indexOf(scope) !== -1) return [false, baseMsg + 'assigns a color to a ' + bottomLevel + '-level scope'];
-                if (unCheckForGlobal(scope) && scopeKeys.indexOf(scope) === -1) return [false, baseMsg + 'assigns a color to a non existent scope'];
+                if (inheritanceKeys.indexOf(scope) !== -1) {
+                    return [false,
+                        baseMsg + 'assigns a color to a ' + bottomLevel + '-level scope'];
+                }
+                if (unCheckForGlobal(scope) && scopeKeys.indexOf(scope) === -1) {
+                    return [false, baseMsg + 'assigns a color to a non existent scope'];
+                }
             }
 
             // Inheritance
             if (themes[syntaxOrUi].hasOwnProperty('inheritance')) {
                 for (let scope in themes[syntaxOrUi]['inheritance']) {
-                    if (inheritanceKeys.indexOf(scope) === -1) return [false, baseMsg + 'assigns inheritance to a non ' + bottomLevel + '-level scope'];
+                    if (inheritanceKeys.indexOf(scope) === -1) {
+                        return [false,
+                            baseMsg + 'assigns inheritance to a non ' + bottomLevel + '-level scope'];
+                    }
                     let inheritFrom = themes[syntaxOrUi]['inheritance'][scope];
-                    if (inheritanceKeys.indexOf(inheritFrom) !== -1) return [false, baseMsg + 'assigns inheritance from a ' + bottomLevel + '-level scope'];
-                    if (unCheckForGlobal(inheritFrom) && scopeKeys.indexOf(inheritFrom) === -1) return [false, baseMsg + 'assigns inheritance from a non existent scope'];
+                    if (inheritanceKeys.indexOf(inheritFrom) !== -1) {
+                        return [false,
+                            baseMsg + 'assigns inheritance from a ' + bottomLevel + '-level scope'];
+                    }
+                    if (unCheckForGlobal(inheritFrom) && scopeKeys.indexOf(inheritFrom) === -1) {
+                        return [false, baseMsg + 'assigns inheritance from a non existent scope'];
+                    }
                 }
             }
         }
@@ -150,7 +185,11 @@ export class Data {
 
     // User Settings
     private userSetSyntaxUi(): {'syntax': {}, 'ui': {}} {
-        const validColor = (color) => color.match(/^#[0-9a-f]{3,8}$/i) && (color.length === 4 || color.length === 7 || color.length === 9);
+        const validColor = (color) => {
+            return (color.match(/^#[0-9a-f]{3,8}$/i) &&
+                (color.length === 4 || color.length === 7 || color.length === 9));
+        }
+
         let worspaceConfig = vscode.workspace.getConfiguration('themelier'),
             config = {'syntax': {}, 'ui': {}};
 
@@ -168,10 +207,26 @@ export class Data {
     }
 
     // Reading user settings w/ specific theme files
-    public themeSyntaxUi(syntaxUiPick: string[] = this.savedPick, mode: string = this.savedMode, applyUserSettings: boolean = true): {'syntax': {'colors': {}, 'inheritance': {}}, 'ui': { 'colors': {}, 'inheritance': {}}} {
+    public themeSyntaxUi(
+            syntaxUiPick: string[] = this.savedPick,
+            mode: string = this.savedMode,
+            applyUserSettings: boolean = true
+        ): {
+            'syntax': {'colors': {}, 'inheritance': {}},
+            'ui': { 'colors': {}, 'inheritance': {}}
+        }
+    {
         let themes = this.getThemes(syntaxUiPick, mode),
             inheritance =  JSON.parse(JSON.stringify(this.inheritance)), // Make object copy
-            theming = {'syntax': {'colors': themes['syntax']['colors'], 'inheritance': inheritance['syntax']}, 'ui': {'colors': themes['ui']['colors'], 'inheritance': inheritance['ui']}};
+            theming = {
+                'syntax': {
+                    'colors': themes['syntax']['colors'],
+                    'inheritance': inheritance['syntax']
+                }, 'ui': {
+                    'colors': themes['ui']['colors'],
+                    'inheritance': inheritance['ui']
+                }
+            };
 
         // Inheritance
         ['syntax', 'ui'].forEach(syntaxOrUi => {
@@ -210,7 +265,8 @@ export class Data {
             this._inheritance = {'syntax': {}, 'ui': {}};
             for (let syntaxOrUi in readInheritance) {
                 for (let item in readInheritance[syntaxOrUi]) {
-                    readInheritance[syntaxOrUi][item].forEach(x => { this._inheritance[syntaxOrUi][x] = item; });
+                    readInheritance[syntaxOrUi][item]
+                        .forEach(x => { this._inheritance[syntaxOrUi][x] = item; });
                 }
             }
         }
@@ -219,13 +275,18 @@ export class Data {
     }
 
     // Writing final theme file
-    public writeTheme(name: string, theme: {}, dir = path.join(this.baseDir, 'dest')) { // TODO async
-        fs.writeFileSync(path.join(dir, name + '.json'), JSON.stringify(theme, null, 2), 'utf8');
+    public writeTheme(name: string, theme: {}, dir = path.join(this.baseDir, 'dest')): Promise<any> {
+        return new Promise((accept, reject) => {
+            fs.writeFile(path.join(dir, name + '.json'),
+                            JSON.stringify(theme, null, 2), 'utf8')
+            .then((index) => accept())
+            .catch((err) => reject(this.fsError(err, 'Write', name)));
+        });
     }
 
     // Get final theme file for export
-    public getTheme(file: string): Object {
-        return this.readJson(file + '.json', path.join(this.baseDir, 'dest'));
+    public getTheme(name: string): Object {
+        return this.readJson(name + '.json', path.join(this.baseDir, 'dest'));
     }
 
     dispose() {
