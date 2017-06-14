@@ -8,10 +8,6 @@
     "name": "rafamel"
   },
   "icon": "icon_256.png",
-  "galleryBanner": {
-    "color": "#202329",
-    "theme": "dark"
-  },
   "categories": [
     "Themes",
     "Other"
@@ -20,9 +16,7 @@
     "themes",
     "theme",
     "personalization",
-    "personalisation",
     "customization",
-    "customisation",
     "maker"
   ],
   "repository": {
@@ -117,11 +111,13 @@
     "test": "node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
-    "typescript": "^2.3.2",
-    "vscode": "^1.0.0",
-    "mocha": "^2.3.3",
+    "@types/mocha": "^2.2.32",
     "@types/node": "^6.0.40",
-    "@types/mocha": "^2.2.32"
+    "mocha": "^2.3.3",
+    "tslint": "^5.4.3",
+    "tslint-language-service": "^0.9.6",
+    "typescript": "^2.3.4",
+    "vscode": "^1.0.0"
   },
   "dependencies": {
     "color-namer": "^1.1.0",

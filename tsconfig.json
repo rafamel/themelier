@@ -1,13 +1,22 @@
-{
+{ // https://www.typescriptlang.org/docs/handbook/compiler-options.html
+  // npm install typescript tslint tslint-language-service --save-dev
   "compilerOptions": {
+    "noImplicitAny": false,
+    "alwaysStrict": true,
     "module": "commonjs",
     "target": "es6",
     "outDir": "out",
-    "lib": [
-      "es6"
-    ],
+    "lib": [ "es6" ],
     "sourceMap": true,
-    "rootDir": "."
+    "rootDir": ".",
+    "plugins": [
+      {
+        "name": "tslint-language-service",
+        "alwaysShowRuleFailuresAsWarnings": true,
+        "ignoreDefinitionFiles": true,
+        "configFile": "tslint.json"
+      }
+    ]
   },
   "exclude": [
     "node_modules",

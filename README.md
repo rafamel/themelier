@@ -12,7 +12,7 @@ The goal of *Themelier* is to introduce a set of scoping rules that *makes sense
 
 It standarizes the behavior of themes (as they'll only change colors, but mostly not scoping rules), **provides a way to quickly access, use, and personalize an ample set of themes**, and **allows for any syntax theme to be used with any UI theme,** as long as they're both either dark or light.
 
-No only that, you can also export your personalized themes as a `tmTheme` file or as a *VSCode* theme extension for distribution!
+No only that, **you can also export** your personalized themes as a `tmTheme` file or as a *VSCode* theme extension for distribution!
 
 ![Rundown](https://raw.githubusercontent.com/rafamel/themelier/master/docs/images/rundown.gif)
 
@@ -77,7 +77,8 @@ themelier.syntax: {
 - `themelier.light`: Negative numbers will darken; positive numbers will lighten. `-100` will always be black; `100` will always be white.
 - `themelier.saturation`: Negative numbers will desaturate; positive numbers will saturate. `-100` will turn colors greyscale.
 
-This would desaturate syntax theme colors by 10 and lighten them by 2:
+As an example, this would desaturate syntax theme colors by `10` and lighten them by `2`:
+
 ```javascript
 themelier.light: 2,
 themelier.saturation: -10
@@ -118,12 +119,15 @@ The built in syntax themes don't try to replicate the scoping rules of the origi
 
 - Add interfaces
 - Safety check for buttons and notifications background.
+- Better auto UI theming
 - Write documentation on UI themes
+- Settings to internal `settings.json`?
+- Rename controller to interaction
+- Settings: onDidSaveTextDocument
 
 ## Credits
 
 * [Code Samples](https://github.com/akamud/vscode-theme-onedark)
-* [Icon look](https://github.com/will-stone/plastic)
 * Syntax theme colors:
     * [One Dark](https://atom.io/themes/one-dark-syntax)
     * [One Dark Vivid](https://atom.io/themes/one-dark-vivid-syntax)

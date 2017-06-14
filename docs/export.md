@@ -14,10 +14,10 @@ To create a brand new *VSCode* theme extension, you must have [**Git**](https://
 
 Create a new folder and open it with *VSCode*, so it is the root folder of your project. Then, press `ctrl(⌘) + shift + p`, type `Export Themelier Theme`, hit return, and choose *Create VSCode Theme*.
 
-One your theme extension is created, you can test it by pressing `F5`. To package your theme as an `VSIX` (so you can install it as a local package) or publish it in the [*Marketplace*](https://marketplace.visualstudio.com/vscode), you must have `vsce installed`. Run `npm install -g vsce` to install it, and then `vsce package` or `vsce publish` in the root directory of your new theme. Read the [Publishing Extensions](https://code.visualstudio.com/docs/extensions/publish-extension) documentation for further instructions.
+One your theme extension is created, you can test it by pressing `F5`. To package your theme as an `VSIX` (so you can install it as a local package) or publish it in the [*Marketplace*](https://marketplace.visualstudio.com/vscode), you must have `vsce` installed. Run `npm install -g vsce` to install it, and then `vsce package` or `vsce publish` in the root directory of your new theme to build the package or publish it in the [*Marketplace*](https://marketplace.visualstudio.com/vscode). Read the [Publishing Extensions](https://code.visualstudio.com/docs/extensions/publish-extension) documentation for further instructions.
 
 ### Updating a Theme Extension
 
-To update a previously created theme extension, press `ctrl(⌘) + shift + p`, type `Export Themelier Theme`, hit return, and choose *Export as VSCode JSON theme file*. Save it overwriting the previous JSON in the `themes` folder of your extension. Don't forget to increment your version by modifying the `"version"` key in your extension `package.json`.
+To update a previously created theme extension, press `ctrl(⌘) + shift + p`, type `Export Themelier Theme`, hit return, and choose *Export as VSCode JSON theme file*. Overwrite with it the previous JSON in the `themes` folder of your extension. Don't forget to increment your version by modifying the `"version"` key in your extension `package.json`.
 
 You can then normally package or publish your updated extension.
