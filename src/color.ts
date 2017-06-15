@@ -47,7 +47,7 @@ export class ColorHex {
         let tColor = tinycolor(this.hex);
 
         if (pc === -1 || pc === -2) {
-            const amount = (pc === -2) ? 85 : 65;
+            const amount = (pc === -2) ? 85 : 65; // TODO Take readability into account, calculate variable pc
             tColor = ((tColor.isDark())
                 ? tColor.lighten(amount)
                 : tColor.darken(amount)).greyscale();

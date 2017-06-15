@@ -2,6 +2,8 @@
 import * as vscode from 'vscode'; // VS Code extensibility API
 import { Data } from './data';
 import { IJsonTheme, ITokenColor } from './interfaces';
+import { ColorHex } from './color';
+
 export class Builder {
 
     constructor (private data: Data) {
@@ -12,7 +14,7 @@ export class Builder {
 
     // General
     public async build(applyUserTheme = true): Promise<any> {
-        const name = 'Themelier ' + this.data.modeName();
+        const name = this.data.modeTheme();
         const theme = this.data.getTheme(applyUserTheme);
         const scopes= this.data.scopes;
 

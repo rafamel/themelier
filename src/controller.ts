@@ -1,5 +1,7 @@
 'use strict';
 import * as vscode from 'vscode'; // VS Code extensibility API
+import * as path from 'path';
+import * as delay from 'timeout-as-promise';
 import { InputBoxOptions } from 'vscode';
 import { Data } from './data';
 import { Builder } from './builder';
@@ -13,6 +15,37 @@ export class Controller {
 
     public dispose() { }
 
+    // Update on changed settings
+    public updateOnChangedSettings(saved: vscode.TextDocument) {
+        // TODO detect other changes
+        delay(1500) // Changes are not immediately applied, set a delay
+        .then(() => {
+            const fileName = path.basename(saved.fileName);
+            if (fileName !== 'settings.json') return;
+
+            const currentTheme = this.data.currentTheme;
+            if (currentTheme === this.data.modeTheme('dark')
+            || currentTheme === this.data.modeTheme('light')) {
+                // Detect when theme was changed to Themelier but there was no explicit choice
+                if (!this.data.choice.explicit) {
+                    const msg = `You can now choose your Themelier theme`;
+                    this.actionMsg(msg, 'Choose', this.choose, false);
+                    return;
+                }
+
+                // Detect when current Themelier theme doesn't match last choice
+                const lastMode = this.data.choice.forMode;
+                if (currentTheme !== this.data.modeTheme(lastMode)) {
+                    console.log(currentTheme, this.data.modeTheme(lastMode));
+                    // tslint:disable-next-line:max-line-length
+                    const msg = `Your current theme is ${ currentTheme } while your last chosen Themelier themes were for ${ this.data.modeName(lastMode) }`;
+                    this.actionMsg(msg, 'Change', this.choose, false);
+                    return;
+                }
+            }
+        });
+    }
+
     // Building
     public build = async (reload: boolean = false, forExport: boolean = false): Promise<any> => {
 
@@ -22,7 +55,7 @@ export class Controller {
         if (this.data.mode !== choice.forMode) {
             // tslint:disable-next-line:max-line-length
             const msg = `Your current mode ${ this.data.modeName() } while your last chosen Themelier UI was for ${ this.data.modeName(choice.forMode) }`;
-            this.actionMsg(msg,'Change', this.choose);
+            this.actionMsg(msg, 'Change', this.choose);
             return Promise.reject(msg);
         }
 
@@ -70,7 +103,6 @@ export class Controller {
                 if (!mode) reject();
                 else {
                     this.data.mode = mode;
-                    // TODO Change theme
                     accept();
                 }
             });
@@ -125,7 +157,11 @@ export class Controller {
                 'explicit': true
             };
             // Build
-            this.build();
+            return this.build();
+        })
+        .then(() => {
+            // Change Theme to Themelier if build was successful
+            this.data.currentTheme = this.data.modeTheme(this.data.choice.forMode);
         })
         .catch((err) => {
             if (err) vscode.window.showErrorMessage(err);
@@ -176,7 +212,7 @@ export class Controller {
             return new Promise((accept, reject) => {
                 vscode.window.showInputBox({'prompt': 'Name your Theme (optional)'})
                 .then(name => {
-                    if (!name) name = `Themelier ${ this.data.modeName() } derived`;
+                    if (!name) name = this.data.modeTheme() + ' derived';
                     accept([type, onlySyntax, name]);
                 });
             });

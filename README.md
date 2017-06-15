@@ -117,13 +117,11 @@ The built in syntax themes don't try to replicate the scoping rules of the origi
 
 ## TODO
 
-- Add interfaces
-- Safety check for buttons and notifications background.
+- Safety check for buttons and notifications background
 - Better auto UI theming
 - Write documentation on UI themes
-- Settings to internal `settings.json`?
-- Rename controller to interaction
 - Settings: onDidSaveTextDocument
+- Update Video
 
 ## Credits
 

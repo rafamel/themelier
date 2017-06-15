@@ -24,22 +24,31 @@ export function activate(context: vscode.ExtensionContext) {
         // (or automatically chosen theme due to other causes)
         console.log('First Ever Themelier Full Build');
         // Silent full build
-        builder.fullBuild();
-        vscode.window.showInformationMessage('Themelier is active', { 'title': 'Choose a theme' })
-        .then((item)  => {
-            if (!item) return;
-            controller.choose();
+        builder.fullBuild()
+        .then(() => {
+            vscode.window.showInformationMessage('Themelier is active', { 'title': 'Choose a theme' })
+            .then((item)  => {
+                if (!item) return;
+                controller.choose();
+            });
+        })
+        .catch((err) => {
+            vscode.window.showErrorMessage('Themelier failed to do the initial build');
         });
     } else if (justUpdated()) {
         // Do full build and reload on updates
         console.log('Post Update Themelier Full Build');
         // Silent full build
-        builder.fullBuild();
-        // If it's the current theme, rebuild the chosen theme with the controller assurances, and automatic reload
-        const currentTheme = vscode.workspace.getConfiguration().get<string>('workbench.colorTheme');
-        if (currentTheme === 'Themelier ' + data.modeName()) {
-            controller.build(true);
-        }
+        builder.fullBuild()
+        .then(() => {
+            // If it's the current theme, rebuild the chosen theme with the controller assurances, and automatic reload
+            if (data.currentTheme === data.modeTheme()) {
+                controller.build(true);
+            }
+        })
+        .catch((err) => {
+            vscode.window.showErrorMessage('Themelier failed to do the reset build');
+        });
     }
 
     // Register Commands
@@ -55,8 +64,13 @@ export function activate(context: vscode.ExtensionContext) {
         controller.export();
     });
 
+    // Register Events
+    const saveEv = vscode.workspace.onDidSaveTextDocument((saved) => {
+        controller.updateOnChangedSettings(saved);
+    });
+
     // Add to a list of disposables which are disposed when this extension is deactivated.
-    context.subscriptions.push(data, builder, themeExport, controller, rebuildCm, chooseCm, exportCm);
+    context.subscriptions.push(data, builder, themeExport, controller, rebuildCm, chooseCm, exportCm, saveEv);
 
 }
 

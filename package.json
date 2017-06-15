@@ -127,6 +127,7 @@
     "plist-json": "0.0.2",
     "sort-object": "^3.0.2",
     "spawn-command": "0.0.2-1",
+    "timeout-as-promise": "^1.0.0",
     "tinycolor2": "^1.4.1"
   }
 }
