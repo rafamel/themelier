@@ -17,7 +17,6 @@ export class Controller {
 
     // Update on changed settings
     public updateOnChangedSettings(saved: vscode.TextDocument) {
-        // TODO detect other changes
         delay(1500) // Changes are not immediately applied, set a delay
         .then(() => {
             const fileName = path.basename(saved.fileName);
@@ -43,6 +42,8 @@ export class Controller {
                     return;
                 }
             }
+            // Rebuild if Themelier settings have changed
+            if (this.data.settingsChanged) this.build();
         });
     }
 

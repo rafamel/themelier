@@ -75,6 +75,17 @@ export class Data {
         return vscode.workspace.getConfiguration().get<string>('workbench.colorTheme');
     }
 
+    // Last Build Settings
+    public setBuiltSettings() {
+        const settings = JSON.stringify(vscode.workspace.getConfiguration('themelier'));
+        this.context.globalState.update('thlBuilt', settings);
+    }
+    public get settingsChanged(): boolean {
+        const builtSettings = this.context.globalState.get('thlBuilt') as string;
+        const settings = JSON.stringify(vscode.workspace.getConfiguration('themelier'));
+        return settings !== builtSettings;
+    }
+
     // Current Mode & Choice
     public set mode(mode: string) {
         mode = mode.toLowerCase();

@@ -98,7 +98,10 @@ export class Builder {
         };
         return new Promise((accept, reject) => {
             this.data.writeTheme(ansTheme)
-            .then(() => accept())
+            .then(() => {
+                this.data.setBuiltSettings();
+                accept();
+            })
             .catch((err) => reject(err));
         });
     }
