@@ -17,7 +17,7 @@ export class Controller {
 
     // Update on changed settings
     public updateOnChangedSettings(saved: vscode.TextDocument) {
-        delay(1500) // Changes are not immediately applied, set a delay
+        delay(2000) // Changes are not immediately applied, set a delay
         .then(() => {
             const fileName = path.basename(saved.fileName);
             if (fileName !== 'settings.json') return;

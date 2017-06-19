@@ -76,11 +76,11 @@ These are all the properties you can define in the `themelier.ui` object of your
     - `sidebar`: Sidebar (left *Explorer* bar).
     - `statusBar`: Status Bar (bottom).
     - `titleBar`: Title Bar (top).
-- `altBackground`: Secondary background color for top tabs background (inactive tabs and free space) - and notifications (when possible).
+- `altBackground`: Secondary background color for top tabs background (inactive tabs and free space) - and notifications background (when possible).
     - `activityBar`: Activity Bar (left icon bar).
 - `selection`: For selected text.
 - `line`: Line number and indentation guides.
 - `border`: For a contrast border between areas.
-- `badge`: Activity Bar badges - and buttons (when possible).
+- `badge`: Activity Bar badges background - and buttons (when possible).
 
 Notifications and Buttons issue: 

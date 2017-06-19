@@ -117,9 +117,7 @@ The built in syntax themes don't try to replicate the scoping rules of the origi
 
 ## TODO
 
-- Safety check for buttons and notifications background
-- Better auto UI theming
-- Write documentation on UI themes
+- Fix current line in Atomic UIs
 - Update Video
 
 ## Credits

@@ -114,13 +114,13 @@
             "sideBarSectionHeader.background": 5,
             "list.inactiveSelectionBackground": 12.5,
             "list.activeSelectionBackground": 12.5,
-            "list.activeSelectionForeground": -2,
+            "list.activeSelectionForeground": -1,
             "list.focusBackground": 12.5,
             "list.hoverBackground": 7.5
         },
         "statusBar": {
             "statusBar.background": 0,
-            "statusBar.foreground": -2,
+            "statusBar.foreground": -1,
             "statusBar.noFolderBackground": 0,
             "statusBarItem.hoverBackground": 5
         },
@@ -136,10 +136,11 @@
         },
         "activityBar": {
             "activityBar.background": 0,
-            "activityBar.foreground": -2
+            "activityBar.foreground": -1
         },
         "notification": {
-            "notification.background": 0
+            "notification.background": 0,
+            "notification.foreground": -1
         },
         "selection": {
             "editor.selectionBackground": 0,
@@ -157,10 +158,11 @@
         },
         "badge": {
             "activityBarBadge.background": 0,
-            "activityBarBadge.foreground": -2
+            "activityBarBadge.foreground": -1
         },
         "button": {
-            "button.background": 0
+            "button.background": 0,
+            "button.foreground": -1
         }
     }
 }

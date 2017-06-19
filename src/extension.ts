@@ -64,7 +64,7 @@ export function activate(context: vscode.ExtensionContext) {
         controller.export();
     });
 
-    // Register Events
+    // Register Save Event
     const saveEv = vscode.workspace.onDidSaveTextDocument((saved) => {
         controller.updateOnChangedSettings(saved);
     });

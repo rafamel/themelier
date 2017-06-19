@@ -43,14 +43,26 @@ export class ColorHex {
     }
 
     public modify(pc: number, mode: string): ColorHex {
+        function toReadable(amount: number = 1, dark: boolean = null) {
+            if (dark === null) dark = tColor.isDark();
+
+            let newTColor = tinycolor(tColor.toHexString());
+            newTColor = ((dark)
+                ? newTColor.lighten(amount)
+                : newTColor.darken(amount)).greyscale();
+            if (amount === 100) return newTColor;
+
+            const readability = tinycolor.readability(
+                tColor.toHexString(),
+                newTColor.toHexString()
+            );
+            return (readability < 15) ? toReadable(amount + 1, dark) : newTColor;
+        }
         if (pc === 0) return this;
         let tColor = tinycolor(this.hex);
 
-        if (pc === -1 || pc === -2) {
-            const amount = (pc === -2) ? 85 : 65; // TODO Take readability into account, calculate variable pc
-            tColor = ((tColor.isDark())
-                ? tColor.lighten(amount)
-                : tColor.darken(amount)).greyscale();
+        if (pc < 0) {
+            tColor = toReadable();
         } else {
             tColor = ((mode === 'light')
                 ? tColor.greyscale().darken(pc)

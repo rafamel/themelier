@@ -34,4 +34,26 @@ For example, the *Plastic* theme, which can be found at `themes/syntax/dark/plas
 
 ## UI Themes
 
-Leaving any undefined will maintain the VSCode defaults.
+They work in a similar fashion to syntax themes, though in this case, leaving any value undefined will maintain the VSCode defaults for that mode (dark or light), since there are only two levels of inheritance - as there is no `global` color. You can check the valid keys at [the *Extended Settings* documentation](https://github.com/rafamel/themelier/tree/master/docs/README.md).
+
+**It's worth noting that button and notification inheritance will only occur when both `altBackground` and `badge` are dark,** since VSCode is unable to apply a distinct font color for buttons and notifications, also making information, warning, and error signs, inherit from the notification font color. This would change as soon as VSCode is able to properly implement these styles.
+
+UI themes live in the `themes/ui` folder of the repo in a `json` file with two keys: `colors` and `inheritance` - the latter being optional and only needed in order to alter the default inheritance rules, - and are indexed in `themes/ui.json`.
+
+As an example, the *Atomic Dark* theme, found at `themes/ui/dark/atomic-dark.json`, is defined as follows:
+
+```javascript
+{
+    "colors": {
+        "mainBackground": "#282C34", 
+        "altBackground": "#21252B",
+        "selection": "#3F4450",
+        "line": "#4C5262",
+        "badge": "#577AC7"
+    },
+    "inheritance": {
+        "sidebar": "altBackground",
+        "activityBar": "mainBackground"
+    }
+}
+```
